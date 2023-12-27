@@ -25,7 +25,7 @@ def main():
     return({
         'userId': 1,
         'username': "USer1",
-        'message': "Welcome",
+        'message': "ZDR Emo",
 
     })
 
