@@ -3,8 +3,10 @@ from dotenv import load_dotenv, find_dotenv
 import os
 from flask import Flask, jsonify, request
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = 'your_secret_key'  # Change this to a secure secret key
 login_manager = LoginManager(app)
 
@@ -16,6 +18,17 @@ class User(UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id)
+
+
+@app.route('/', methods=['GET'])
+def main():
+    return({
+        'userId': 1,
+        'username': "USer1",
+        'message': "Welcome",
+
+    })
+
 
 @app.route('/login', methods=['POST'])
 def login():

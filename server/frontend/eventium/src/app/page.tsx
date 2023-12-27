@@ -14,10 +14,28 @@ const Home: React.FC = () => {
     });
   }, []);
 
+  // const [ data , setData ] = useState([{}])
+  // useEffect(() =>{
+  //    fetch('/').then(
+
+  //     res => res.json()
+  //    ).then(
+  //       data=>{
+  //           setData(data);
+  //           console.log(data);
+
+  //       }
+
+  //    )}, [])
+     
   return (
-    <div>
-      <h1>Hello from Next.js</h1>
-      <p>{message}</p>
+   <div>
+      <h1>Your Component</h1>
+      {message ? (
+        <p>Message from API: {message}</p>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };
