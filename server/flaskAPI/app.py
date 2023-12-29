@@ -4,9 +4,15 @@ from flask import Flask, jsonify, request
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from flask_cors import CORS
 from user.routes import user_bp  # Import user_bp directly
+from pymongo import MongoClient
+from user.models import User  # Import the User class
 
 app = Flask(__name__)
 CORS(app)
+
+password = os.environ.get("MONGODB_PWD")
+connection_string = f"mongodb+srv://maxralev:{password}@cluster1.hn9gicg.mongodb.net/?retryWrites=true&w=majority&ssl=true&tlsAllowInvalidCertificates=true"
+client = MongoClient(connection_string)
 
 # Register the user_bp blueprint
 app.register_blueprint(user_bp)
@@ -23,18 +29,28 @@ def main():
 def protected():
     return jsonify(message="This is a protected route")
 
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+    name = data.get('name')
+    email = data.get('email')
+    password = data.get('password')
+
+    user_instance = User()
+    user_data = user_instance.signup(name, email, password)
+
+    return jsonify(user_data)
+
 if __name__ == '__main__':
     app.run(debug=True)
 
 
-
 # load_dotenv(find_dotenv())
 
-# password = os.environ.get("MONGODB_PWD")
+
 
 # # MongoDB connection string with SSL
-# connection_string = f"mongodb+srv://maxralev:{password}@cluster1.hn9gicg.mongodb.net/?retryWrites=true&w=majority&ssl=true&tlsAllowInvalidCertificates=true"
-# client = MongoClient(connection_string)
+
 
 # # List the available databases
 # dbs = client.list_database_names()
