@@ -1,55 +1,31 @@
-from flask import Flask
 from dotenv import load_dotenv, find_dotenv
 import os
 from flask import Flask, jsonify, request
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 from flask_cors import CORS
+from user.routes import user_bp  # Import user_bp directly
 
 app = Flask(__name__)
 CORS(app)
-app.secret_key = 'your_secret_key'  # Change this to a secure secret key
-login_manager = LoginManager(app)
 
-# Dummy user for demonstration purposes
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
-
+# Register the user_bp blueprint
+app.register_blueprint(user_bp)
 
 @app.route('/', methods=['GET'])
 def main():
-    return({
+    return {
         'userId': 1,
-        'username': "USer1",
+        'username': "User1",
         'message': "ZDR Emo",
-
-    })
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    user_id = request.form.get('user_id')
-    user = User(user_id)
-    login_user(user)
-    return jsonify(message="Login successful")
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return jsonify(message="Logout successful")
+    }
 
 @app.route('/api/protected')
-@login_required
 def protected():
     return jsonify(message="This is a protected route")
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 # load_dotenv(find_dotenv())
