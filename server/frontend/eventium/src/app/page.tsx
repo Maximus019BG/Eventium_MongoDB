@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+// component
 import UsernameI from './Components/UsernameInput';
 import EmailI from './Components/EmailInput';
 import PasswordI from './Components/PasswordInput';
@@ -48,9 +49,9 @@ const Home: React.FC = () => {
 
       <form name='signup_form' onSubmit={handleSignUp}>
 
-      <UsernameI onChange={(e) => setUsername(e.target.value)} />
-      <EmailI />
-      <PasswordI />
+      <UsernameI/>
+      <EmailI/>
+      <PasswordI/>
 
         <input type='submit' value="Sign Up" className='btn' />
       </form>
