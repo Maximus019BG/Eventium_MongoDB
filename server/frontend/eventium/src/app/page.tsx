@@ -54,7 +54,7 @@ const Home: React.FC = () => {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        
+         
 
       <label>Email</label>
         <input
