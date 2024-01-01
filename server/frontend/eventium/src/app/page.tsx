@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import UsernameI from './Components/UsernameInput';
+import EmailI from './Components/EmailInput';
+import PasswordI from './Components/PasswordInput';
 
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -34,27 +36,9 @@ const Home: React.FC = () => {
 
       <form name='signup_form' onSubmit={handleSignUp}>
 
-      <UsernameI />
-
-        <label>Email</label>
-        <input
-          type='email'
-          name='email'
-          className='field'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <label>Password</label>
-        <input
-          type='password'
-          name='password'
-          className='field'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+      <UsernameI onChange={(e) => setUsername(e.target.value)} />
+      <EmailI />
+      <PasswordI />
 
         <input type='submit' value="Sign Up" className='btn' />
       </form>
