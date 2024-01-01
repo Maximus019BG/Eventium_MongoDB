@@ -1,10 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-// component
-import UsernameI from './Components/UsernameInput';
-import EmailI from './Components/EmailInput';
-import PasswordI from './Components/PasswordInput';
 
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -49,9 +45,36 @@ const Home: React.FC = () => {
 
       <form name='signup_form' onSubmit={handleSignUp}>
 
-      <UsernameI/>
-      <EmailI/>
-      <PasswordI/>
+      <label>Username</label>
+        <input
+          type='text'
+          name='name'
+          className='field'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        
+
+      <label>Email</label>
+        <input
+          type='email'
+          name='email'
+          className='field'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+      <label>Password</label>
+        <input
+          type='password'
+          name='password'
+          className='field'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
         <input type='submit' value="Sign Up" className='btn' />
       </form>
