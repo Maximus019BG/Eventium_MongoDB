@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
+import img from './images/register.jpg';
 
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -40,44 +42,72 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Вписване</h1>
+    <div className="flex min-h-screen">
 
-      <form name='signup_form' onSubmit={handleSignUp}>
-
-      <label>Username</label>
-        <input
-          type='text'
-          name='name'
-          className='field'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
+      {/* IMG */}
+      <div className="w-full md:w-1/2 hidden md:block">
+        <Image
+          src={img}
+          alt="Signup"
+          className="w-full h-screen object-cover"
         />
-         
+      </div>
 
-      <label>Email</label>
-        <input
-          type='email'
-          name='email'
-          className='field'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+      {/* TEXT */}
+      <div className="w-full md:w-1/2 p-4 bg-gray-100">
+        <div className="w-full h-full flex flex-col justify-center items-center">
+          <h1 className="text-3xl font-bold mb-6">Вписване</h1>
 
-      <label>Password</label>
-        <input
-          type='password'
-          name='password'
-          className='field'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <form name="signup_form" onSubmit={handleSignUp} className="w-full max-w-md">
 
-        <input type='submit' value="Sign Up" className='btn' />
-      </form>
+            <div className="mb-4">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-600">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="name"
+                className="mt-1 p-2 w-full border rounded-md"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="mt-1 p-2 w-full border rounded-md"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-600">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="mt-1 p-2 w-full border rounded-md"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <input type="submit" value="Sign Up" className="bg-blue-500 text-white p-3 rounded-md cursor-pointer hover:bg-blue-600" />
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+
     </div>
   );
 };
