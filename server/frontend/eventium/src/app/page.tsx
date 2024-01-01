@@ -13,6 +13,18 @@ const Home: React.FC = () => {
 
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
     
+
+    
+    axios.get(`${apiUrl}/`)
+      .then(response => {
+        // Handle the successful response here
+        console.log('Response:', response.data);
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error('Error:', error.message);
+      });   
+
     axios.post(`${apiUrl}/user/signup`, {
       name: username,
       email: email,

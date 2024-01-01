@@ -29,17 +29,7 @@ def main():
 def protected():
     return jsonify(message="This is a protected route")
 
-@app.route('/signup', methods=['POST'])
-def signup():
-    data = request.get_json()
-    name = data.get('name')
-    email = data.get('email')
-    password = data.get('password')
 
-    user_instance = User()
-    user_data = user_instance.signup(name, email, password)
-
-    return jsonify(user_data)
 
 if __name__ == '__main__':
     app.run(debug=True)

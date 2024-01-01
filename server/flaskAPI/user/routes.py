@@ -3,7 +3,7 @@ from user.models import User
 
 user_bp = Blueprint('user', __name__)
 
-@user_bp.route('/user/signup', methods=['POST'])
+@user_bp.route('/user/signup', methods=['POST','GET'])
 def signUp():
     data = request.get_json()
     name = data.get('name')
@@ -13,4 +13,4 @@ def signUp():
     user_instance = User()
     user_data = user_instance.signup(name, email, password)
 
-    return jsonify(user_data)
+    return user_data
