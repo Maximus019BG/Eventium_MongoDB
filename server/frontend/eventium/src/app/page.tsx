@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import UsernameI from './Components/UsernameInput';
 
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -32,15 +33,8 @@ const Home: React.FC = () => {
       <h1>Вписване</h1>
 
       <form name='signup_form' onSubmit={handleSignUp}>
-        <label>Username</label>
-        <input
-          type='text'
-          name='name'
-          className='field'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+
+      <UsernameI />
 
         <label>Email</label>
         <input
