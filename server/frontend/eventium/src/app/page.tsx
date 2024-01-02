@@ -56,7 +56,8 @@ const Home: React.FC = () => {
       {/* TEXT */}
       <div className="w-full md:w-1/2 p-4 bg-gray-100">
         <div className="w-full h-full flex flex-col justify-center items-center">
-          <h1 className="text-3xl font-bold mb-6">Вписване</h1>
+        
+          <h1 className="text-5xl font-bold mb-6">Вписване</h1>
 
           <form name="signup_form" onSubmit={handleSignUp} className="w-full max-w-md">
 

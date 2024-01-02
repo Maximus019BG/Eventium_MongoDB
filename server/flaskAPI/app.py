@@ -35,45 +35,6 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-# load_dotenv(find_dotenv())
-
-
-
-# # MongoDB connection string with SSL
-
-
-# # List the available databases
-# dbs = client.list_database_names()
-# EventiumDatabase_db= client.EventiumDatabase
-# collections = EventiumDatabase_db.list_collection_names()
-
-
-# def insert_test_doc():
-#     collection = EventiumDatabase_db.Users
-#     EventiumDatabase_documents = {
-#             "name": "Max",
-#             "type": "test"
-
-#     }
-#     inserted_id = collection.insert_one(EventiumDatabase_documents).inserted_id
-#     print(inserted_id)
-
-# Eventium = client.EventiumDatabase
-# EventiumDatabase_collection = Eventium.Users
-
-# def create_documents ():
-#     first_names = ["Tim", "Sarah", "Jennifer", "Jose", "Brad", "Allen"]
-#     last_names =["Ruscica", "Smith", "Bart", "Cater", "Pit", "Geral", ]
-#     ages = [21, 40, 23, 19, 34, 67]
-
-#     docs=[]
-
-#     for first_name,last_name, age in zip(first_names,last_names, ages):
-#         doc = {"first_name": first_name, "last_name" : last_name, "age": age}
-#         docs.append(doc)
-
-#     EventiumDatabase_collection.insert_many(docs)
-
 
 
 
