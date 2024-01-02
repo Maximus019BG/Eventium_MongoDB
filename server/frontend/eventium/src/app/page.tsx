@@ -69,7 +69,7 @@ const Home: React.FC = () => {
         <form name="signup_form" onSubmit={handleSignUp} className="w-full max-w-md">
   
           <div className="mb-2">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-1">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-600 mb-1">Потребителски Име</label>
             <input
               type="text"
               id="username"
@@ -82,7 +82,7 @@ const Home: React.FC = () => {
           </div>
   
           <div className="mb-2">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-600 mb-1">Електронна Поща</label>
             <input
               type="email"
               id="email"
@@ -95,7 +95,7 @@ const Home: React.FC = () => {
           </div>
   
           <div className="mb-2">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-600 mb-1">Парола</label>
             <input
               type="password"
               id="password"
