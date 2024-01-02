@@ -48,7 +48,7 @@ const Home: React.FC = () => {
       <div className="w-full md:w-1/2 hidden md:block">
         <Image
           src={img}
-          alt="Signup"
+          alt="Sign-up"
           className="w-full h-screen object-cover"
         />
       </div>
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
           <form name="signup_form" onSubmit={handleSignUp} className="w-full max-w-md">
 
             <div className="mb-4">
-              <label htmlFor="username" className="block text-sm font-medium text-gray-600">Username</label>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-600">Потребителско име</label>
               <input
                 type="text"
                 id="username"
@@ -74,7 +74,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-600">Електронна поща</label>
               <input
                 type="email"
                 id="email"
@@ -87,7 +87,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-600">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-600">Парола</label>
               <input
                 type="password"
                 id="password"
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <input type="submit" value="Sign Up" className="bg-blue-500 text-white p-3 rounded-md cursor-pointer hover:bg-blue-600" />
+              <input type="submit" value="Вписване" className=" bg-lime-500 text-white p-3 rounded-md cursor-pointer transition-colors hover:bg-lime-600" />
             </div>
 
           </form>
