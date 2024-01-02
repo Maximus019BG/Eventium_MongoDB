@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def main():
-    ...
+   # code ...
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -26,11 +26,10 @@ For database we used **MongoDB**.
 ```
 from dotenv import load_dotenv, find_dotenv
 
-...
+# code ...
 
-password = os.environ.get("EXAMPLE_PASSWORD")
-connection_string = f"mon://...:{password}@..."
-client = MongoClient(connection_string)
+connection_link = f"mongoDB://link..."
+client = MongoClient(connection_link)
 
-...
+# code ...
 ```
