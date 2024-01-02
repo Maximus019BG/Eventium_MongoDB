@@ -17,7 +17,7 @@ class User:
 
         # Choose the database and collection
         db = client['EventiumDatabase']
-        users_collection = db['Users']
+        users_collection = db['Users'] 
 
         # Insert user data into the collection
         result = users_collection.insert_one(user_data)
@@ -32,4 +32,4 @@ class User:
             "email": email,
             "password": password,
         }
-        return user
+        return user 

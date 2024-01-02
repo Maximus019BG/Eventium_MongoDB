@@ -15,7 +15,7 @@ connection_string = f"mongodb+srv://maxralev:{password}@cluster1.hn9gicg.mongodb
 client = MongoClient(connection_string)
 
 # Register the user_bp blueprint
-app.register_blueprint(user_bp)
+app.register_blueprint(user_bp) 
 
 @app.route('/', methods=['GET'])
 def main():

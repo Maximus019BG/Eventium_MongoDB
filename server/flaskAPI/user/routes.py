@@ -13,4 +13,4 @@ def signUp():
     user_instance = User()
     user_data = user_instance.signup(name, email, password)
 
-    return user_data
+    return user_data 
