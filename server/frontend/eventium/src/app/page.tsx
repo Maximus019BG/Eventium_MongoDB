@@ -74,7 +74,7 @@ const Home: React.FC = () => {
               type="text"
               id="username"
               name="name"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-300 rounded-sm text-sm focus:outline-none"
+              className="mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm focus:outline-none"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
               type="email"
               id="email"
               name="email"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-300 rounded-sm text-sm focus:outline-none"
+              className="mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm focus:outline-none"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -102,7 +102,7 @@ const Home: React.FC = () => {
               type="password"
               id="password"
               name="password"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-300 rounded-sm text-sm  focus:outline-none "
+              className="mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm  focus:outline-none "
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -111,7 +111,7 @@ const Home: React.FC = () => {
           </div>
   
           <div className="flex items-center justify-between mt-4 mb-20">
-            <input type="submit" value="Създай акаунт" className="bg-green-300 text-white font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-400 text-md" />
+            <input type="submit" value="Създай акаунт" className="bg-green-500 text-white font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-600 text-md" />
           </div>
   
         </form>
