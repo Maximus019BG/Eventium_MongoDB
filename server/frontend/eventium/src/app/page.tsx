@@ -57,11 +57,11 @@ const Home: React.FC = () => {
       {/* TEXT */}
       <div className="w-full md:w-2/5 p-4 bg-gray-100 flex justify-center items-center flex-col pb-20">
   
-        {/* New Image Above Text */}
+        {/* Logo */}
         <Image
           src={logo}
           alt="Logo"
-          className="mb-4 w-50 h-50 object-cover border-4 border-gray-100"
+          className="mb-4 w-96"
         />
   
         <h1 className="text-3xl font-bold mb-5">Вписване</h1>
