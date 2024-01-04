@@ -19,11 +19,9 @@ app.register_blueprint(user_bp)
 
 @app.route('/', methods=['GET'])
 def main():
-    return {
-        'userId': 1,
-        'username': "User1",
-        'message': "ZDR Emo",
-    }
+    return 200
+        
+    
 
 @app.route('/api/protected')
 def protected():
