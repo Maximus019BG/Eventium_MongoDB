@@ -2,12 +2,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
-import img from './images/register.jpg';
-import logo from './images/logo.png';
+import img from '../images/register.jpg';
+
 
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const handleSignUp = (event: React.FormEvent) => {
@@ -29,7 +28,6 @@ const Home: React.FC = () => {
 
     axios.post(`${apiUrl}/user/signup`, {
       name: username,
-      email: email,
       password: password,
     })
     .then((response) => {
@@ -49,7 +47,7 @@ const Home: React.FC = () => {
       <div className="w-full md:w-3/5 hidden md:block overflow-hidden">
         <Image
           src={img}
-          alt="Signup"
+          alt="Signin"
           className="w-full h-full object-cover"
         />
       </div>
@@ -64,7 +62,7 @@ const Home: React.FC = () => {
           className="mb-4 w-96"
         /> */}
   
-        <h1 className="text-5xl font-mono font-bold mb-5 mt-0 xl:mt-20 md:mt-20">Вписване</h1>
+        <h1 className="text-5xl font-mono font-bold mb-5 mt-0 xl:mt-20 md:mt-20">Влизане</h1>
   
         <form name="signup_form" onSubmit={handleSignUp} className="w-full max-w-md">
   
@@ -74,27 +72,15 @@ const Home: React.FC = () => {
               type="text"
               id="username"
               name="name"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-300 rounded-sm text-sm focus:outline-none"
+              className="mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm focus:outline-none"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
               placeholder='Потребителски Име'
             />
           </div>
-  
-          <div className="my-12">
           
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-300 rounded-sm text-sm focus:outline-none"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder='Електронна Поща'
-            />
-          </div>
+            
   
           <div className="my-12">
            
@@ -102,7 +88,7 @@ const Home: React.FC = () => {
               type="password"
               id="password"
               name="password"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-300 rounded-sm text-sm  focus:outline-none "
+              className="mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm  focus:outline-none "
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -111,7 +97,7 @@ const Home: React.FC = () => {
           </div>
   
           <div className="flex items-center justify-between mt-4 mb-20">
-            <input type="submit" value="Създай акаунт" className="bg-green-300 text-white font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-400 text-md" />
+            <input type="submit" value="Влез в акаунт" className="bg-green-500 text-white font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-600 text-md" />
           </div>
   
         </form>
@@ -131,7 +117,7 @@ const Home: React.FC = () => {
         <div className='w-screen  h-2/3 xl:hidden md:w-0 sm:w-screen sm: overflow-clip mx-0 -mb-20 '> 
         <Image
           src={img}
-          alt="Signup2"
+          alt="Signin2"
           className="w-full h-full object-cover"
         />
         </div>
