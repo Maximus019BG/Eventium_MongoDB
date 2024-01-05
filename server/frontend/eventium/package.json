@@ -8,7 +8,8 @@
     "build": "next build",
     "start": " next start",
     "lint": "next lint",
-    "axios": "npm install axios"
+    "axios": "npm install axios",
+    "google-login": "npm install react-google-login"
   },
   "dependencies": {
     "axios": "^1.6.3",

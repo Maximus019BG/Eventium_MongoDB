@@ -4,11 +4,41 @@ import axios from 'axios';
 import Image from 'next/image';
 import img from './images/register.jpg';
 import logo from './images/logo.png';
+import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+declare const window: any;
 
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+ // useEffect to load Google API library
+ useEffect(() => {
+  const script = document.createElement('script');
+  script.src = 'https://apis.google.com/js/api.js';
+  script.onload = () => {
+    // Initialize the Google API library
+    if (window.gapi) {
+      window.gapi.load('auth2', () => {
+        window.gapi.auth2.init({
+          client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        });
+      });
+    }
+  };
+  document.body.appendChild(script);
+
+  return () => {
+    document.body.removeChild(script);
+  };
+}, []);
+
+// Function to handle Google Sign-In
+const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+  // Handle the Google Sign-In response
+  console.log(response);
+};
+
 
   const handleSignUp = (event: React.FormEvent) => {
     event.preventDefault();
@@ -126,6 +156,23 @@ const Home: React.FC = () => {
             backgroundPosition: 'center',
            }}
           />
+
+        {/* Google Sign-In button */}
+          <div className=' absolute right-96'>
+            
+    
+            <GoogleLogin
+            className='absolute right-28 w-max '
+            clientId="370123389865-agiecik59kekarut8otn76lsl63brrrk.apps.googleusercontent.com"
+            buttonText="Google"
+            onSuccess={handleGoogleLogin}
+            onFailure={handleGoogleLogin}
+            cookiePolicy={'single_host_origin'}
+          />
+
+
+          </div>
+
         </div>
          {/* small divice background */}
         <div className='w-screen  h-2/3 xl:hidden md:w-0 sm:w-screen sm: overflow-clip mx-0 -mb-20 '> 
