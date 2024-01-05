@@ -12,12 +12,12 @@ const Home: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
- // useEffect to load Google API library
+ // useEffect to Google API library
  useEffect(() => {
   const script = document.createElement('script');
   script.src = 'https://apis.google.com/js/api.js';
   script.onload = () => {
-    // Initialize the Google API library
+    // Google API library
     if (window.gapi) {
       window.gapi.load('auth2', () => {
         window.gapi.auth2.init({
@@ -35,7 +35,7 @@ const Home: React.FC = () => {
 
 // Function to handle Google Sign-In
 const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-  // Handle the Google Sign-In response
+
   console.log(response);
 };
 
@@ -49,7 +49,7 @@ const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOf
     
     axios.get(`${apiUrl}/`)
       .then(response => {
-        // Handle the successful response here
+        
         console.log('Response:', response.data);
       })
       .catch(error => {
@@ -168,6 +168,7 @@ const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOf
             onSuccess={handleGoogleLogin}
             onFailure={handleGoogleLogin}
             cookiePolicy={'single_host_origin'}
+            redirectUri={`http://localhost:5000/user/signup`}
           />
 
 
