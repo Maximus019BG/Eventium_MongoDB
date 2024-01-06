@@ -6,16 +6,16 @@ import profile from '../images/profilePic.png'
 const NavBar: React.FC = () => {
   return (
     <div className='bg-white flex items-center justify-between border-b-2 border-black'>
-      
+      {/* bg-gray-900 */}
         <Image
           src={logo}
           alt="logo"
           className='w-28'
         />
-        <div className='flex space-x-36 font-bold font-sans uppercase text-md'>
-          <h1 className='hover:underline'>Home</h1>
-          <h1 className='hover:underline'>Create</h1>
-          <h1 className='hover:underline'>Chat</h1>
+        <div className='flex justify-center space-x-36 font-bold font-sans uppercase text-md'>
+          <h1 className='nav'>Home</h1>
+          <h1 className='nav'>Create</h1>
+          <h1 className='nav'>Chat</h1>
         </div>
      
 
