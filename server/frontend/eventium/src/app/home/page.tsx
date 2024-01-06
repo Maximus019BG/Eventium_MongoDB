@@ -7,14 +7,14 @@ import logo from './images/logo.png';
 declare const window: any;
 
 const Main: React.FC = () => {
-  const [username, setUsername] = useState<string | null>(null);
+  const [name, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
  
     const fetchUsername = async () => {
       try {
         const response = await axios.get('http://localhost:5000/'); // replace with your backend API endpoint
-        setUsername(response.data.username); // assuming your API response has a 'username' field
+        setUsername(response.data.name); 
       } catch (error) {
         console.error('Error fetching username:', error);
       }
@@ -25,8 +25,8 @@ const Main: React.FC = () => {
 
   return (
     <div>
-      {username ? (
-        <p>Welcome, {username}!</p>
+      {name ? (
+        <p>Welcome, {name}!</p>
       ) : (
         <p>Loading username...</p>
       )}

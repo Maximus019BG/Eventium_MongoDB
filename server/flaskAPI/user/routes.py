@@ -19,7 +19,4 @@ def sign_up():
 
     return user_data 
 
-@user_bp.route('/', methods=['GET'])
-def mainPage():
-    return 200
 
