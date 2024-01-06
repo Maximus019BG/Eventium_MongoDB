@@ -12,7 +12,7 @@ const NavBar: React.FC = () => {
           alt="logo"
           className='w-28'
         />
-        <div className='flex space-x-40 font-bold text-xl'>
+        <div className='flex space-x-36 font-bold font-sans uppercase text-md'>
           <h1 className='hover:underline'>Home</h1>
           <h1 className='hover:underline'>Create</h1>
           <h1 className='hover:underline'>Chat</h1>
