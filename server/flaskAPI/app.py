@@ -7,12 +7,24 @@ from pymongo import MongoClient
 from datetime import timedelta
 from user.models import User
 from user.routes import user_bp
+from flask_session import Session
+
 
 app = Flask(__name__)
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 CORS(app)
 app.register_blueprint(user_bp)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "your_default_secret_key")
 app.permanent_session_lifetime = timedelta(days=5)
+
+# Initialize Flask-Login
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
+
+# Initialize Flask-Session
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 # Load MongoDB credentials from environment variables
 password = os.environ.get("MONGODB_PWD")
@@ -20,11 +32,6 @@ connection_string = f"mongodb+srv://maxralev:{password}@cluster1.hn9gicg.mongodb
 client = MongoClient(connection_string)
 db = client["EventiumDatabase"]  # Replace with your actual database name
 users_collection = db["Users"]  # Replace with your actual collection name
-
-# Initialize Flask-Login
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
-
 
 class User(UserMixin):
     def __init__(self, user_id, name):
@@ -38,11 +45,11 @@ class User(UserMixin):
             return User(user_data["_id"], user_data["name"])
         return None
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
 
+@app.route("/login", methods=["POST"])
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -52,13 +59,14 @@ def login():
     user_data = users_collection.find_one({"name": name})
 
     if user_data and bcrypt.verify(password, user_data.get("password")):
-        user = User(user_data["_id"], user_data["name"])
+        user = User(str(user_data["_id"]), user_data["name"])
         login_user(user)
         session["user_id"] = str(user.id)
+        session["name"] = user.name  # Store user's name in the session
+        print("Session set:", session)
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
-
 
 @app.route("/logout", methods=["POST"])
 @login_required
@@ -67,7 +75,6 @@ def logout():
     logout_user()
     return jsonify({"message": "Logout successful"}), 200
 
-
 @app.route("/check_session", methods=["GET"])
 def check_session():
     if current_user.is_authenticated:
@@ -75,9 +82,15 @@ def check_session():
     else:
         return jsonify({"message": "Session not active"}), 401
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def main():
-    name = ""
-    return {'name': name}
+    try:
+        # Simulate fetching data from the database
+        name = session.get('name', '')
+        return jsonify({'name': name})
+    except Exception as e:
+        print(f"Error in main route: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
