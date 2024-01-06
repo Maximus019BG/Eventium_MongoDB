@@ -12,12 +12,13 @@ const NavBar: React.FC = () => {
           alt="logo"
           className='w-28'
         />
+       <center>
         <div className='flex justify-center space-x-36 font-bold font-sans uppercase text-md'>
           <h1 className='nav'>Home</h1>
           <h1 className='nav'>Create</h1>
           <h1 className='nav'>Chat</h1>
         </div>
-     
+       </center>
 
       <Image
         src={profile}
