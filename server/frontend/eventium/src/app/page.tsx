@@ -4,7 +4,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import img from './images/register.jpg';
 import logo from './images/logo.png';
-import Main from './home/page'
+import Main from './signin/page'
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
 
@@ -66,7 +66,7 @@ const handleSignUp = async (event: React.FormEvent) => {
     console.log(response.data);
 
     // Redirect only after a successful request
-    window.location.href = '/home';
+    window.location.href = '/signin';
   } catch (error) {
     // Handle errors
     console.error(error);
