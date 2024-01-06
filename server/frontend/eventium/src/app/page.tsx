@@ -4,13 +4,23 @@ import axios from 'axios';
 import Image from 'next/image';
 import img from './images/register.jpg';
 import logo from './images/logo.png';
+import Main from './home/page'
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+
+
 declare const window: any;
+
+
 
 const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const errorI =  console.error("Invalid input. Please fill in all the required fields.");
+ 
+  
+
+
 
  // useEffect to Google API library
  useEffect(() => {
@@ -40,37 +50,31 @@ const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOf
 };
 
 
-  const handleSignUp = (event: React.FormEvent) => {
-    event.preventDefault();
+const handleSignUp = async (event: React.FormEvent) => {
+  event.preventDefault(); // Prevent the default form submission behavior
 
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-    
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-    
-    axios.get(`${apiUrl}/`)
-      .then(response => {
-        
-        console.log('Response:', response.data);
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error('Error:', error.message);
-      });   
-
-    axios.post(`${apiUrl}/user/signup`, {
+  try {
+    const response = await axios.post(`${apiUrl}/user/signup`, {
       name: username,
       email: email,
       password: password,
-    })
-    .then((response) => {
-      // Handle the response if needed
-      console.log(response.data);
-    })
-    .catch((error) => {
-      // Handle errors
-      console.error(error);
     });
-  };
+
+    // Check the response and handle it accordingly
+    console.log(response.data);
+
+    // Redirect only after a successful request
+    window.location.href = '/home';
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+  }
+};
+
+
+
 
   return (
     <div className="flex h-screen">
@@ -141,7 +145,11 @@ const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOf
           </div>
   
           <div className="flex items-center justify-between mt-4 mb-20">
-            <input type="submit" value="Създай акаунт" className="bg-green-500 text-white font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-600 text-md" />
+            <input 
+             type="submit"
+             value="Създай акаунт" 
+             className="bg-green-500 text-white font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-600 text-md"
+             />
           </div>
   
         </form>
@@ -185,6 +193,7 @@ const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOf
         </div>
       </div>
     </div>
+    
   );  
 };
 

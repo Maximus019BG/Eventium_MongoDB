@@ -18,3 +18,8 @@ def sign_up():
     user_data = user_instance.signup(name, email, password)
 
     return user_data 
+
+@user_bp.route('/', methods=['GET'])
+def mainPage():
+    return 200
+

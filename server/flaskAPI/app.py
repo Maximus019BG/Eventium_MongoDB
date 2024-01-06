@@ -23,9 +23,8 @@ def main():
         
     
 
-@app.route('/api/protected')
-def protected():
-    return jsonify(message="This is a protected route")
+
+    
 
 
 
