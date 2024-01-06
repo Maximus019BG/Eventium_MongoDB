@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
-import logo from '../images/logo.png'
+import logo from '../favicon.ico';
 import profile from '../images/profilePic.png'
 
 const NavBar: React.FC = () => {
@@ -10,7 +10,7 @@ const NavBar: React.FC = () => {
         <Image
           src={logo}
           alt="logo"
-          className='w-28'
+          className='w-28 overflow-visible'
         />
        <center>
         <div className='flex justify-center space-x-36 font-bold font-sans uppercase text-md'>
