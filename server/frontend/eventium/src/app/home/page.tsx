@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import logo from './images/logo.png';
+import NavBar from '../Components/navbar';
 
 declare const window: any;
 
@@ -25,11 +26,15 @@ const Main: React.FC = () => {
 
   return (
     <div>
-      {name ? (
+      {/* {name ? (
         <p>Welcome, {name}!</p>
       ) : (
         <p>Loading username...</p>
-      )}
+      )} */}
+
+      <NavBar />
+
+
     </div>
   );
 };
