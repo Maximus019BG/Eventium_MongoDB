@@ -9,35 +9,29 @@ const Home: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const handleSignUp = (event: React.FormEvent) => {
+  const handleSignIn = (event: React.FormEvent) => {
     event.preventDefault();
 
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
     
-
-    
-    axios.get(`${apiUrl}/`)
-      .then(response => {
-        // Handle the successful response here
-        console.log('Response:', response.data);
-      })
-      .catch(error => {
-        // Handle errors here
-        console.error('Error:', error.message);
-      });   
-
-    axios.post(`${apiUrl}/user/signup`, {
+    axios.post(`${apiUrl}/login`, {
       name: username,
       password: password,
-    })
-    .then((response) => {
+  })
+  .then((response) => {
       // Handle the response if needed
       console.log(response.data);
-    })
-    .catch((error) => {
+  
+      // Assuming the response contains a "message" indicating success
+      if (response.data.message === "Login successful") {
+          // Redirect to '/home'
+          window.location.href = '/home';
+      }
+  })
+  .catch((error) => {
       // Handle errors
       console.error(error);
-    });
+  });
   };
 
   return (
@@ -64,7 +58,7 @@ const Home: React.FC = () => {
   
         <h1 className="text-5xl font-mono font-bold mb-5 mt-0 xl:mt-20 md:mt-20">Влизане</h1>
   
-        <form name="signup_form" onSubmit={handleSignUp} className="w-full max-w-md">
+        <form name="signup_form" onSubmit={handleSignIn} className="w-full max-w-md">
   
           <div className="my-12">
             
