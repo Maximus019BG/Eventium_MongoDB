@@ -49,7 +49,7 @@ class User(UserMixin):
 def load_user(user_id):
     return User.get(user_id)
 
-@app.route("/login", methods=["POST"])
+
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -67,6 +67,9 @@ def login():
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
+    
+
+
 
 @app.route("/logout", methods=["POST"])
 @login_required
@@ -75,12 +78,14 @@ def logout():
     logout_user()
     return jsonify({"message": "Logout successful"}), 200
 
+
 @app.route("/check_session", methods=["GET"])
 def check_session():
     if current_user.is_authenticated:
         return jsonify({"message": "Session active", "user_id": current_user.id}), 200
     else:
         return jsonify({"message": "Session not active"}), 401
+
 
 @app.route('/')
 def main():
