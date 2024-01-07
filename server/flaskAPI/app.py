@@ -15,7 +15,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 CORS(app)
 app.register_blueprint(user_bp)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "your_default_secret_key")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "agsd12@^%@Hdha721H^$#@")
 app.permanent_session_lifetime = timedelta(days=5)
 
 # Initialize Flask-Login
