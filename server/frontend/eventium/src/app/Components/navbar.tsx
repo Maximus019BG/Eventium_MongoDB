@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import Image from 'next/image';
 import logo from '../favicon.ico';
@@ -5,7 +6,7 @@ import profile from '../images/profilePic.png'
 
 const NavBar: React.FC = () => {
   return (
-    <div className='bg-white flex items-center justify-between border-b-2 border-black'>
+    <div className='bg-white flex items-center justify-between z-10 shadow-sm shadow-slate-300'>
       {/* bg-gray-900 */}
         <Image
           src={logo}
