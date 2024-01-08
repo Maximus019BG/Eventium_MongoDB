@@ -30,8 +30,8 @@ Session(app)
 password = os.environ.get("MONGODB_PWD")
 connection_string = f"mongodb+srv://maxralev:{password}@cluster1.hn9gicg.mongodb.net/?retryWrites=true&w=majority&ssl=true&tlsAllowInvalidCertificates=true"
 client = MongoClient(connection_string)
-db = client["EventiumDatabase"]  # Replace with your actual database name
-users_collection = db["Users"]  # Replace with your actual collection name
+db = client["EventiumDatabase"]  
+users_collection = db["Users"] 
 
 class User(UserMixin):
     def __init__(self, user_id, name):
@@ -95,7 +95,7 @@ def main():
         return jsonify({'name': name})
     except Exception as e:
         print(f"Error in main route: {e}")
-        return jsonify({'error': 'Internal server error'}), 500
+        return jsonify({'error': 'Internal server error'}            ), 500
     
 if __name__ == '__main__':
     app.run(debug=True)

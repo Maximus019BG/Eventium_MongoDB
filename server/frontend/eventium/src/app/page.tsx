@@ -4,7 +4,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import img from './images/register.jpg';
 import logo from './images/logo.png';
-import Main from './signin/page'
+import Main from './signin/page';
+import Link from 'next/link';
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
 
@@ -148,7 +149,7 @@ const handleSignUp = async (event: React.FormEvent) => {
             <input 
              type="submit"
              value="Създай акаунт" 
-             className="bg-green-500 text-white font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-600 text-md"
+             className="bg-green-500 text-white font-semibold p-4 rounded-lg cursor-pointer text-bold hover:bg-green-600 text-md"
              />
           </div>
   
@@ -190,6 +191,12 @@ const handleSignUp = async (event: React.FormEvent) => {
           alt="Signup2"
           className="w-full h-full object-cover"
         />
+        </div>
+
+        <div>
+          <p className='absolute bottom-1 -ml-56'>Вече имаш акаунт? &nbsp;
+            <Link href="../signin/" passHref className=' underline text-green-500 font-medium'>Влез в него</Link>
+          </p>
         </div>
       </div>
     </div>
