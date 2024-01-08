@@ -4,6 +4,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import logo from './images/logo.png';
 import NavBar from '../Components/navbar';
+import SideBar from '../Components/sidebar';
 
 declare const window: any;
 
@@ -39,8 +40,14 @@ const Main: React.FC = () => {
       };
     }, []);
   return (
-    <div>
+    <div className='h-screen overflow-hidden'>
       <NavBar />
+
+      <div className='flex overflow-hidden'>
+
+      <SideBar />
+
+      
 
       {loading && <p>Loading username...</p>}
 
@@ -52,7 +59,7 @@ const Main: React.FC = () => {
         </p>
       ) 
       }
-      
+      </div>
     </div>
   );
 };
