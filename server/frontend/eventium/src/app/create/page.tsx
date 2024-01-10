@@ -41,7 +41,19 @@ const Create: React.FC = () => {
               </div>
             
             
-                    {/* NAPRAVI ADD PICTURE EMO I GO ISTRII */}
+                    {/* EMO MOLQ DIZAIGN I GO ISTRII KOMENTARA */}
+
+                  <div>
+
+                  <input
+                  type="file"
+                  id="photo"
+                  name="photo"
+                  className="mt-1 p-2 w-full text-sm focus:outline-none "
+                  />
+
+                  </div>
+
 
 
               <div className="flex items-center justify-between mt-4 mb-3">
