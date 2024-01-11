@@ -69,7 +69,7 @@ const handleSignUp = async (event: React.FormEvent) => {
     // Redirect only after a successful request
     window.location.href = '/signin';
   } catch (error) {
-    // Handle errors
+    //  errors
     console.error(error);
   }
 };
