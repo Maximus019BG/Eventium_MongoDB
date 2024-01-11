@@ -101,7 +101,6 @@ def check_session():
 
 def main():
     try:
-        # Simulate fetching data from the database
         name = session.get('name', '')
         return jsonify({'name': name})
     except Exception as e:
