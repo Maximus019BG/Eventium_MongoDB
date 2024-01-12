@@ -18,40 +18,34 @@ class User:
     def signup(self, name, email, password):
         # Hash the password using bcrypt
         hashed_password = bcrypt.hash(password)
-        
-        #under development
-        user = self.users_collection.find_one({"name": name, "email": email})
-        if user:
-            
-            # Prepare user data
-            user_data = {
-                "name": name,
-                "email": email,
-                "password": hashed_password,
-             }
 
-            # Insert user data into the collection
-            result = self.users_collection.insert_one(user_data)
+        # Check if a user with the provided email already exists
+        existing_user = self.users_collection.find_one({"email": email})
+        if existing_user:
+            message = "Вече има акаунт с този имейл."
+            return None, message
 
-            # Retrieve the inserted user's ID
-            user_id = result.inserted_id
+        # Prepare user data
+        user_data = {
+            "name": name,
+            "email": email,
+            "password": hashed_password,
+        }
 
-            user = {
-                "_id": str(user_id),
-                "name": name,
-                "email": email,
-                "password": hashed_password,
-            }
-            message = None
-            return user, message
-        
-        else:
-            message = "Вече има акаунт с такова име или емейл "
+        # Insert user data into the collection
+        result = self.users_collection.insert_one(user_data)
 
-            return message
+        # Retrieve the inserted user's ID
+        user_id = result.inserted_id
 
-            
-        
+        user = {
+            "_id": str(user_id),
+            "name": name,
+            "email": email,
+            "password": hashed_password,
+        }
+        message = None
+        return user, message
 
        
    
