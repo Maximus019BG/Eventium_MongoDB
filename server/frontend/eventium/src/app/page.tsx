@@ -113,7 +113,7 @@ const handleSignUp = async (event: React.FormEvent) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              placeholder='Потребителски Име'
+              placeholder='Потребителско име'
             />
           </div>
   
@@ -127,7 +127,7 @@ const handleSignUp = async (event: React.FormEvent) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder='Електронна Поща'
+              placeholder='Електронна поща'
             />
           </div>
   
