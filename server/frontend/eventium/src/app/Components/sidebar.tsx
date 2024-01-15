@@ -27,7 +27,7 @@ const SideBar: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col items-start mt-[0.5px] fixed bg-white h-screen shadow-sm shadow-slate-400 z-6 w-60 overflow-hidden text-3xl pt-4'>
+    <div className='flex flex-col items-start mt-[113px] fixed bg-white h-screen shadow-sm shadow-slate-400 z-6 w-60 overflow-hidden text-3xl pt-4'>
       <h1 className='mb-4 text-4xl text-black'>Filters</h1>
 
       <FilterItem

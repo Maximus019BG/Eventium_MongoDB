@@ -20,9 +20,6 @@ const Home: React.FC = () => {
   const errorI =  console.error("Invalid input. Please fill in all the required fields.");
  
   
-
-
-
  // useEffect to Google API library
  useEffect(() => {
   const script = document.createElement('script');
@@ -73,7 +70,6 @@ const handleSignUp = async (event: React.FormEvent) => {
     console.error(error);
   }
 };
-
 
 
 

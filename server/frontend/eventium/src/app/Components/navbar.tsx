@@ -6,7 +6,7 @@ import profile from '../images/profilePic.png'
 
 const NavBar: React.FC = () => {
   return (
-    <div className='bg-white flex items-center justify-between z-10 shadow-sm shadow-slate-300'>
+    <div className='bg-white fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300'>
      
         <Image
           src={logo}

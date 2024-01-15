@@ -11,6 +11,10 @@ from flask_session import Session
 from werkzeug.utils import secure_filename
 from gridfs import GridFS
 from werkzeug.datastructures import FileStorage
+from bson import ObjectId 
+import random
+import io
+import base64
 
 
 
@@ -96,13 +100,59 @@ def check_session():
     else:
         return jsonify({"message": "Session not active"}), 401
 
+#fix not json format
+def convert_objectid_to_str(data):
+    if isinstance(data, dict):
+        for key, value in data.items():
+            if isinstance(value, (dict, list)):
+                data[key] = convert_objectid_to_str(value)
+            elif isinstance(value, ObjectId):
+                data[key] = str(value)
+    elif isinstance(data, list):
+        for i, item in enumerate(data):
+            data[i] = convert_objectid_to_str(item)
+    return data
 
 @app.route('/')
-
 def main():
     try:
         name = session.get('name', '')
-        return jsonify({'name': name})
+        
+        # Find documents in the collection
+        cursor = posts_collection.find()
+        
+        # Convert the cursor to a list of documents
+        documents_list_normal = list(cursor)
+        
+        # Shuffle the list in place
+        random.shuffle(documents_list_normal)
+        
+        # Convert all ObjectId fields to strings in each document
+        for i, document in enumerate(documents_list_normal):
+            documents_list_normal[i] = convert_objectid_to_str(document)
+            
+            # Fetch the image data from GridFS
+            image_id = document.get("photos")
+            image = grid_fs.get(ObjectId(image_id))
+
+            if image:
+                # Convert bytes to base64-encoded string
+                document["image_data"] = base64.b64encode(image.read()).decode('utf-8')
+
+        # Extract title, description, and photos fields from each document
+        formatted_documents_list = [
+            {
+                "title": doc.get("title", ""),
+                "description": doc.get("description", ""),
+                "photos": doc.get("photos", ""),
+                "image_data": doc.get("image_data", "")
+            }
+            for doc in documents_list_normal
+        ]
+        
+        # Return the shuffled list of documents with title, description, and photos fields as JSON
+        return jsonify({'documents': formatted_documents_list})
+    
     except Exception as e:
         print(f"Error in main route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
