@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
@@ -10,13 +10,17 @@ const Main: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [documents, setDocuments] = useState<any[] | null>(null);
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/');
+        const response = await axios.get('http://localhost:5000/', {
+          withCredentials: true,
+        });
+    
         if (isMounted) {
           setUsername(response.data.name);
           setDocuments(response.data.documents);
@@ -30,29 +34,64 @@ const Main: React.FC = () => {
         }
       }
     };
+    
+    const checkSession = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/check_session', {
+          withCredentials: true,
+        });
+        console.log('Session Check Response:', response.data);
+        console.log('Headers:', response.headers);
+    
+        if (isMounted) {
+          if (response.data.message === "Session active") {
+            setAuthenticated(true);
+            setUsername(response.data.name);
+          } else {
+            setAuthenticated(false);
+            setUsername(null);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+      }
+    };
 
     fetchData();
+    checkSession();
 
     return () => {
       isMounted = false;
     };
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:5000/logout', null, {
+        withCredentials: true,
+      });
+
+      setAuthenticated(false);
+      setUsername(null);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
   return (
     <div className='h-screen '>
       <NavBar />
 
       <div className='flex overflow-hidden'>
-
         <SideBar />
 
         {loading && <p>Loading data...</p>}
-
         {error && <p>{error}</p>}
 
-        {name && (
+        {authenticated && (
           <p>
-            Welcome, {name}!
+            Welcome, {name}!{' '}
+            <button onClick={handleLogout}>Logout</button>
           </p>
         )}
 
