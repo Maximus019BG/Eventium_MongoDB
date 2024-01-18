@@ -5,6 +5,7 @@ import NavBar from '../Components/navbar'
 import axios from 'axios'
 
 
+
 const Create: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -42,7 +43,7 @@ const Create: React.FC = () => {
   return (
     <>
       <NavBar />
-      <div className='w-5/6 h-5/6 shadow-sm shadow-slate-300 rounded-xl mx-36 my-36 p-24'>
+      <div className='w-5/6 h-5/6 shadow-sm shadow-slate-300 rounded-xl mx-36 p-24'>
         <h1 className='my-10 font-bold'>Създай пост</h1>
         <form onSubmit={handleSignUp}>
           <div>
@@ -71,7 +72,7 @@ const Create: React.FC = () => {
             />
           </div>
 
-          <div className='my-12'>
+          <div className='my-12 '>
             <input
               type='file'
               id='photo'

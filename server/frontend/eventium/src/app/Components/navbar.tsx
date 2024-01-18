@@ -1,12 +1,13 @@
 'use client'
 import React from 'react'
 import Image from 'next/image';
+import Link from 'next/link';
 import logo from '../favicon.ico';
 import profile from '../images/profilePic.png'
 
 const NavBar: React.FC = () => {
   return (
-    <div className='bg-white flex items-center justify-between z-10 shadow-sm shadow-slate-300'>
+    <div className='bg-white fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300'>
      
         <Image
           src={logo}
@@ -15,9 +16,15 @@ const NavBar: React.FC = () => {
         />
        <center>
         <div className='flex justify-center space-x-8 font-bold font-sans uppercase text-md md:space-x-36 md:text-sd sm:space-x-16'>
-          <h1 className='nav'>Home</h1>
-          <h1 className='nav'>Create</h1>
-          <h1 className='nav'>Chat</h1>
+        <Link href='/home'>
+            <h1 className='nav'>Home</h1>
+          </Link>
+          <Link href='/create'>
+            <h1 className='nav'>Create</h1>
+          </Link>
+          <Link href='#'>
+            <h1 className='nav'>Chat</h1>
+          </Link>
         </div>
        </center>
 
