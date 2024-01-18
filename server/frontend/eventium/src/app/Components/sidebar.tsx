@@ -1,48 +1,29 @@
 import React, { useState } from 'react';
 
-interface FilterItemProps {
-  text: string;
-  selected: boolean;
-  onClick: () => void;
-}
-
-const FilterItem: React.FC<FilterItemProps> = ({ text, selected, onClick }) => {
-  return (
-    <div
-      className={`cursor-pointer py-2 px-4 border-b border-t border-l border-r ${
-        selected ? 'border-green-500 rounded-full' : 'border-white'
-      }`}
-      onClick={onClick}
-    >
-      {text}
-    </div>
-  );
-};
-
 const SideBar: React.FC = () => {
-  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const [isSpanClicked, setIsSpanClicked] = useState<boolean[]>([false, false, false]);
 
-  const handleFilterClick = (filter: string) => {
-    setSelectedFilter(filter === selectedFilter ? null : filter);
+  const handleSpanClick = (index: number) => {
+    const updatedIsSpanClicked = [...isSpanClicked];
+    updatedIsSpanClicked[index] = !updatedIsSpanClicked[index];
+    setIsSpanClicked(updatedIsSpanClicked);
   };
 
+  const filters = ['Filter 1', 'Filter 2', 'Filter 3', 'Filter 4']; // Add more filters as needed
+
   return (
-    <div className='flex flex-col items-start mt-[0.5px] fixed bg-white h-screen shadow-sm shadow-slate-400 z-6 w-60 overflow-hidden text-3xl pt-4'>
-      <h1 className='mb-4 text-4xl text-black'>Filters</h1>
+    <div className='flex flex-col items-start mt-[0.5px] fixed bg-white h-screen shadow-sm shadow-slate-400 z-6 w-60 overflow-hidden text-2xl pt-4'>
+      <h1 className='mb-4 mx-2 text-4xl text-black'>Filters</h1>
 
-      <FilterItem
-        text='Filter 1'
-        selected={selectedFilter === 'Filter 1'}
-        onClick={() => handleFilterClick('Filter 1')}
-      />
-
-      <FilterItem
-        text='Filter 2'
-        selected={selectedFilter === 'Filter 2'}
-        onClick={() => handleFilterClick('Filter 2')}
-      />
-
-      {/* Add more filters as needed */}
+      {filters.map((filter, index) => (
+        <span
+          key={index}
+          className={`border ${isSpanClicked[index] ? 'border-green-500' : 'border-white'} p-1 rounded-full cursor-pointer m-3`}
+          onClick={() => handleSpanClick(index)}
+        >
+          {filter}
+        </span>
+      ))}
     </div>
   );
 };
