@@ -30,6 +30,7 @@ const SideBar: React.FC = () => {
         </span>
       ))}
     </div>
+    
   );
 };
 
