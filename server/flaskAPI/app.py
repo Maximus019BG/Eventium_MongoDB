@@ -100,7 +100,7 @@ def convert_objectid_to_str(data):
     return data
 
 @app.route('/', methods=['GET'])
-@cache.cached(timeout=120, unless=lambda: request.args.get('nocache') == 'true')
+@cache.cached(timeout=20, unless=lambda: request.args.get('nocache') == 'true')
 def main():
     try:
         
