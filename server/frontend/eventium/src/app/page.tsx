@@ -6,7 +6,7 @@ import img from './images/register.jpg';
 import logo from './images/logo.png';
 import Main from './signin/page';
 import Link from 'next/link';
-import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+
 
 
 declare const window: any;
@@ -41,11 +41,6 @@ const Home: React.FC = () => {
   };
 }, []);
 
-// Function to handle Google Sign-In
-const handleGoogleLogin = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-
-  console.log(response);
-};
 
 
 const handleSignUp = async (event: React.FormEvent) => {
@@ -162,22 +157,7 @@ const handleSignUp = async (event: React.FormEvent) => {
            }}
           />
 
-        {/* Google Sign-In button */}
-          <div className=' absolute right-96'>
-            
-    
-            <GoogleLogin
-            className='absolute right-28 w-max '
-            clientId="370123389865-agiecik59kekarut8otn76lsl63brrrk.apps.googleusercontent.com"
-            buttonText="Google"
-            onSuccess={handleGoogleLogin}
-            onFailure={handleGoogleLogin}
-            cookiePolicy={'single_host_origin'}
-            redirectUri={`http://localhost:5000/user/signup`}
-          />
-
-
-          </div>
+       
 
         </div>
          {/* small divice background */}

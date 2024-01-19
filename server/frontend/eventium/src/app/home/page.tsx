@@ -5,6 +5,12 @@ import Image from 'next/image';
 import NavBar from '../Components/navbar';
 import SideBar from '../Components/sidebar';
 
+
+interface DateInputProps {
+  onDateChange: (date: Date) => void;
+}
+
+
 const Main: React.FC = () => {
   const [name, setUsername] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

@@ -14,10 +14,14 @@ from werkzeug.utils import secure_filename
 from gridfs import GridFS
 from werkzeug.datastructures import FileStorage
 from bson import ObjectId 
+from datetime import date, datetime
+from func.functions import is_event_past, delete_expired_posts
+from flask_caching import Cache
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_NAME'] = 'eventium_session'
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 Session(app)
 
 CORS(app, supports_credentials=True)
@@ -82,23 +86,30 @@ def logout():
     logout_user()
     return jsonify({"message": "Logout successful"}), 200
 
-
+#fix not json format
+def convert_objectid_to_str(data):
+    if isinstance(data, dict):
+        for key, value in data.items():
+            if isinstance(value, (dict, list)):
+                data[key] = convert_objectid_to_str(value)
+            elif isinstance(value, ObjectId):
+                data[key] = str(value)
+    elif isinstance(data, list):
+        for i, item in enumerate(data):
+            data[i] = convert_objectid_to_str(item)
+    return data
 
 @app.route('/', methods=['GET'])
+@cache.cached(timeout=120, unless=lambda: request.args.get('nocache') == 'true')
 def main():
     try:
+        
         name = session.get('name', '')
-        
-        # Find documents in the collection
-        cursor = posts_collection.find()
-        
-        # Convert the cursor to a list of documents
-        documents_list_normal = list(cursor)
-        
-        # Shuffle the list in place
-        random.shuffle(documents_list_normal)
-        
-        # Convert all ObjectId fields to strings in each document
+
+        delete_expired_posts(posts_collection)
+        cursor = posts_collection.find()          # Find documents in the collection
+        documents_list_normal = list(cursor)      # Convert the cursor to a list of documents
+        random.shuffle(documents_list_normal)     # Shuffle 
         for i, document in enumerate(documents_list_normal):
             documents_list_normal[i] = convert_objectid_to_str(document)
             
@@ -129,6 +140,12 @@ def main():
         return jsonify({'error': 'Internal server error'}), 500
 
 
+
+
+
+
+
+
 @app.route("/check_session", methods=["GET"])
 def check_session():
     if current_user.is_authenticated:
@@ -136,48 +153,48 @@ def check_session():
     else:
         return jsonify({"message": "Session not active"}), 401
 
-#fix not json format
-def convert_objectid_to_str(data):
-    if isinstance(data, dict):
-        for key, value in data.items():
-            if isinstance(value, (dict, list)):
-                data[key] = convert_objectid_to_str(value)
-            elif isinstance(value, ObjectId):
-                data[key] = str(value)
-    elif isinstance(data, list):
-        for i, item in enumerate(data):
-            data[i] = convert_objectid_to_str(item)
-    return data
+
+
 
 @app.route('/posts', methods=["POST"])
 def posts():
     try:
-        # Assuming you are sending form data in the request
+       
         title = request.form.get('title')
         description = request.form.get('description')
         photos = request.files.get('photos')
+        date_of_creation = str(date.today())         #saving the date as string    
+        date_of_event = request.form.get('date')
 
         if title and description and photos:
             # Save the uploaded file to GridFS
             file_id = save_file_to_gridfs(photos)
 
-            # Create a dictionary with the post data
+            
             post_data = {
                 "title": title,
                 "description": description,
                 "photos": file_id,
+                "created_at": date_of_creation,
+                "date_for_event":date_of_event,
             }
 
             # Insert the post data into the MongoDB collection
             _ = posts_collection.insert_one(post_data)
 
-            return jsonify({"message": "Post created successfully"})
+           
+
+            return jsonify({"message": "Post created successfully"}), 200
+        
         else:
             return jsonify({"error": "Missing required parameters"}), 400
+            
+           
 
     except Exception as e:
         print(f"Error in /posts route: {e}")
         return jsonify({"error": "Internal server error"}), 500
+
 
 def save_file_to_gridfs(file: FileStorage):
     # Save the file to GridFS and return the file_id

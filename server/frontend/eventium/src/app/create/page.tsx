@@ -1,35 +1,39 @@
 'use client'
-import React from 'react'
-import { useEffect, useState } from 'react'
-import NavBar from '../Components/navbar'
-import axios from 'axios'
-
-
+import React, { useState } from 'react';
+import axios from 'axios';
+import NavBar from '../Components/navbar';
+import DateInput from '../Components/dateInput';
 
 const Create: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [photos, setPhotos] = useState<File | null>(null);
+  const [date, setdate] = useState<Date | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSignUp = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
+  const handleSignUp = async () => {
     try {
+      if (!date) {
+        setError('Please select a date.');
+        return;
+      }
+
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
+      formData.append('date', date.toISOString().split('T')[0]);
+
       if (photos) {
         formData.append('photos', photos);
       }
 
       await axios.post(`${apiUrl}/posts`, formData);
-
       // Redirect only after a successful request
       window.location.href = '/home';
     } catch (error) {
       console.error(error);
+      setError('Error creating post. Please try again later.');
     }
   };
 
@@ -37,6 +41,11 @@ const Create: React.FC = () => {
     if (event.target.files) {
       setPhotos(event.target.files[0]);
     }
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setdate(date);
+    setError(null); // Clear any previous error when date changes
   };
   
 
@@ -71,6 +80,8 @@ const Create: React.FC = () => {
               placeholder='Описание'
             />
           </div>
+
+          <DateInput onDateChange={handleDateChange} />
 
           <div className='my-12 '>
             <input
