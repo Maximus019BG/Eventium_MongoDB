@@ -5,4 +5,5 @@ Flask-Session
 passlib
 pymongo
 Werkzeug
+Flask-Caching
 
