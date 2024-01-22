@@ -81,7 +81,7 @@ const Create: React.FC = () => {
             />
           </div>
 
-          <DateInput onDateChange={handleDateChange} />
+          <DateInput onDateChange={handleDateChange } />
 
           <div className='my-12 '>
             <input
@@ -92,12 +92,12 @@ const Create: React.FC = () => {
               onChange={handleFileChange}
             />
           </div>
-
+          
           <div className='flex items-center justify-between mt-4 mb-3'>
             <input
               type='submit'
               value='Създай пост'
-              className='bg-green-500 text-white font-semibold p-4 rounded-lg cursor-pointer text-bold hover:bg-green-600 text-md'
+              className='bg-green-500 text-white font-semibold p-4 rounded-lg -ml-[2px] cursor-pointer text-bold hover:bg-green-600 text-md'
             />
           </div>
         </form>
