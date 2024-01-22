@@ -104,7 +104,7 @@ const Main: React.FC = () => {
         {documents && (
           <div className='ml-80 mt-36  mr-10 mb-2 w-5/6'>
             {documents.map((document, index) => (
-              <div key={index} className='mb-6 pt-6  pr-6 shadow-md shadow-slate-300 rounded-xl w-11/12'>
+              <div key={index} className='mb-6 pt-6  pr-6 shadow-sm shadow-slate-300 rounded-xl w-11/12'>
                 <h1 className='font-semibold text-xl pl-6 w-screen'>{document.title}</h1>
                 <p className='mt-2 pl-6 w-screen'>{document.description}</p>
 

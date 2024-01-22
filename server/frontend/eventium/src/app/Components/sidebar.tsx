@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
+
+
 
 const SideBar: React.FC = () => {
   const [isSpanClicked, setIsSpanClicked] = useState<boolean[]>([false, false, false]);
-
+  
   const handleSpanClick = (index: number) => {
     const updatedIsSpanClicked = [...isSpanClicked];
     updatedIsSpanClicked[index] = !updatedIsSpanClicked[index];
     setIsSpanClicked(updatedIsSpanClicked);
   };
 
-  const filters = ['Filter 1', 'Filter 2', 'Filter 3', 'Filter 4']; // От тук могат да се слагат и махат филтъри
-
+  const filters = ['Filter 1', 'Filter 2', 'Filter 3', 'Filter 4']; // From here you can change filters
+  
   return (
-    <div className='flex flex-col items-start mt-[48px] fixed bg-white h-screen shadow-sm shadow-slate-400 z-6 w-60 overflow-hidden text-2xl pt-4'>
-      <h1 className='mb-4 text-4xl text-black'>Filters</h1>
+    <div className='flex flex-col items-start mt-[48px] fixed bg-white h-screen shadow-sm shadow-slate-400 z-6 w-60  text-2xl pt-4 '>
+      <h1 className='mb-4 ml-5 text-4xl text-black'>Filters</h1>
 
       {filters.map((filter, index) => (
         <span
@@ -29,7 +31,11 @@ const SideBar: React.FC = () => {
           )}
         </span>
       ))}
-      
+        <div className='relative top-24 left-8'>
+          <button className='relative top-96 '>
+            Dark mode
+          </button>
+        </div>
     </div>
   );
 };
