@@ -12,7 +12,7 @@ const Signin: React.FC = () => {
   const handleSignIn = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const apiUrl = process.env.REACT_APP_API_URL || 'https://8xwjh672-5000.euw.devtunnels.ms/';
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
     
     axios.post(`${apiUrl}/login`, {
       name: username,
