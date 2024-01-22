@@ -30,3 +30,7 @@ body {
 .nav:hover::after {
   @apply w-[100%]
 }
+
+.unselectable {
+  user-select: none;
+}
