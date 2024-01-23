@@ -15,6 +15,9 @@ const Signin: React.FC = () => {
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
     
     axios.post(`${apiUrl}/login`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
       name: username,
       password: password,
   })

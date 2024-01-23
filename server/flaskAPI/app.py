@@ -1,7 +1,8 @@
 import os
 import random
+import requests
 import base64
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, session, g
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from passlib.hash import bcrypt
@@ -13,7 +14,7 @@ from flask_session import Session
 from werkzeug.utils import secure_filename
 from gridfs import GridFS
 from werkzeug.datastructures import FileStorage
-from bson import ObjectId 
+from bson import ObjectId
 from datetime import date, datetime
 from func.functions import is_event_past, delete_expired_posts
 from flask_caching import Cache
@@ -23,7 +24,9 @@ from flask_login import login_user
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_NAME'] = 'eventium_session'
-app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=5)  # Adjust session freshness
+app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=5)
+
 
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 Session(app)
@@ -55,16 +58,16 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_id):
-        user_data = users_collection.find_one({"_id": user_id})
+        user_data = users_collection.find_one({"_id": ObjectId(user_id)})
         if user_data:
-            return User(user_data["_id"], user_data["name"])
+            return User(str(user_data["_id"]), user_data["name"])
         return None
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
 
-@app.route("/login", methods=["POST","GET"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
     data = request.get_json()
     name = data.get("name")
@@ -73,16 +76,19 @@ def login():
     user_data = users_collection.find_one({"name": name})
 
     if user_data and bcrypt.verify(password, user_data.get("password")):
-         
-         user = User(str(user_data["_id"]), user_data["name"])
-         login_user(user, fresh=True)  # 
-         print("Logged in. Session Data:", session)  
+        user = User(str(user_data["_id"]), user_data["name"])
+        login_user(user, fresh=True)
 
-         return jsonify({"message": "Login successful"}), 200
+        # Clear login-related flash messages
+        session.pop('_flashes', None)
 
+        # Explicitly set session freshness to True
+        session['_fresh'] = True
+
+        return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
-    
+
 
 
 @app.route("/check_session" , methods=["GET", "POST"])
@@ -91,6 +97,7 @@ def check_session():
     print("Session Fresh:", session["_fresh"])
     print("Session Permanent:", session["_permanent"])
     print("Session Data:", session)
+
     return jsonify({"message": "Session checked"}), 200
 
 
@@ -118,12 +125,14 @@ def convert_objectid_to_str(data):
 @cache.cached(timeout=20, unless=lambda: request.args.get('nocache') == 'true')
 def main():
     try:
-        
         name = session.get('name', '')
 
-        print("Session Fresh:", session['_fresh'])
-        print("Session Permanent:", session['_permanent'])
-        print("Session Data:", session)
+        print("Before Session Modification - Fresh:", session['_fresh'])
+        print("Before Session Modification - Permanent:", session['_permanent'])
+        print("Before Session Modification - Data:", session)
+
+        # Explicitly set session freshness to True
+        session['_fresh'] = True
 
         delete_expired_posts(posts_collection)
         cursor = posts_collection.find()          # Find documents in the collection
@@ -131,11 +140,10 @@ def main():
         random.shuffle(documents_list_normal)     # Shuffle 
         for i, document in enumerate(documents_list_normal):
             documents_list_normal[i] = convert_objectid_to_str(document)
-            
+
             # Fetch the image data from GridFS
             image_id = document.get("photos")
             image = grid_fs.get(ObjectId(image_id))
-            
 
             if image:
                 # Convert bytes to base64-encoded string
@@ -151,16 +159,17 @@ def main():
             }
             for doc in documents_list_normal
         ]
-        
-        # Return the shuffled list of documents with title, description, and photos fields as JSON
-        return jsonify({'documents': formatted_documents_list})
-    
+        print("After Session Modification - Fresh:", session['_fresh'])
+        print("After Session Modification - Permanent:", session['_permanent'])
+        print("After Session Modification - Data:", session)
+
+        # After the loop
+        return jsonify({'documents': convert_objectid_to_str(formatted_documents_list)}), 200
+
+
     except Exception as e:
         print(f"Error in main route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
-
-
-
 
 
 
