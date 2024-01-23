@@ -17,21 +17,24 @@ from bson import ObjectId
 from datetime import date, datetime
 from func.functions import is_event_past, delete_expired_posts
 from flask_caching import Cache
+from secrets import token_hex
+from flask_login import login_user
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_NAME'] = 'eventium_session'
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=5)  # Adjust session freshness
+
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 Session(app)
 
 CORS(app, supports_credentials=True)
 
-app.register_blueprint(user_bp)
+app.register_blueprint(user_bp)  # Uncomment this if you have a blueprint to register
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "agsd12@^%@Hdha721H^$#@")
-app.permanent_session_lifetime = timedelta(days=5)
+# Explicitly set a temporary secret key for debugging purposes
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
-app.config['UPLOAD_FOLDER'] = 'path/to/your/upload/folder'
 # Initialize Flask-Login
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
@@ -61,7 +64,7 @@ class User(UserMixin):
 def load_user(user_id):
     return User.get(user_id)
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["POST","GET"])
 def login():
     data = request.get_json()
     name = data.get("name")
@@ -70,20 +73,32 @@ def login():
     user_data = users_collection.find_one({"name": name})
 
     if user_data and bcrypt.verify(password, user_data.get("password")):
-        
-        user = User(str(user_data["_id"]), user_data["name"])
+         
+         user = User(str(user_data["_id"]), user_data["name"])
+         login_user(user, fresh=True)  # 
+         print("Logged in. Session Data:", session)  
 
-        login_user(user)
-        session['name'] = user_data['name']
+         return jsonify({"message": "Login successful"}), 200
 
-        return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
+    
+
+
+@app.route("/check_session" , methods=["GET", "POST"])
+@login_required  
+def check_session():
+    print("Session Fresh:", session["_fresh"])
+    print("Session Permanent:", session["_permanent"])
+    print("Session Data:", session)
+    return jsonify({"message": "Session checked"}), 200
+
 
 @app.route("/logout", methods=["POST"])
 @login_required
 def logout():
     logout_user()
+    print("Logged out. Session Data:", session)  # Debugging statement
     return jsonify({"message": "Logout successful"}), 200
 
 #fix not json format
@@ -106,6 +121,10 @@ def main():
         
         name = session.get('name', '')
 
+        print("Session Fresh:", session['_fresh'])
+        print("Session Permanent:", session['_permanent'])
+        print("Session Data:", session)
+
         delete_expired_posts(posts_collection)
         cursor = posts_collection.find()          # Find documents in the collection
         documents_list_normal = list(cursor)      # Convert the cursor to a list of documents
@@ -116,6 +135,7 @@ def main():
             # Fetch the image data from GridFS
             image_id = document.get("photos")
             image = grid_fs.get(ObjectId(image_id))
+            
 
             if image:
                 # Convert bytes to base64-encoded string
@@ -141,17 +161,6 @@ def main():
 
 
 
-
-
-
-
-
-@app.route("/check_session", methods=["GET"])
-def check_session():
-    if current_user.is_authenticated:
-        return jsonify({"message": "Session active", "user_id": str(current_user.id), "name": current_user.name}), 200
-    else:
-        return jsonify({"message": "Session not active"}), 401
 
 
 
