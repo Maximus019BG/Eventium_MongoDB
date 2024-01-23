@@ -33,16 +33,16 @@ Session(app)
 
 CORS(app, supports_credentials=True)
 
-app.register_blueprint(user_bp)  # Uncomment this if you have a blueprint to register
+app.register_blueprint(user_bp)  
 
-# Explicitly set a temporary secret key for debugging purposes
+# session
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
-# Initialize Flask-Login
+# Flask-Login
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
-# Load MongoDB credentials from environment variables
+# MongoDB 
 password = os.environ.get("MONGODB_PWD")
 connection_string = f"mongodb+srv://maxralev:{password}@cluster1.hn9gicg.mongodb.net/?retryWrites=true&w=majority&ssl=true&tlsAllowInvalidCertificates=true"
 client = MongoClient(connection_string)
@@ -51,10 +51,12 @@ users_collection = db["Users"]
 posts_collection = db["Posts"]
 grid_fs = GridFS(db)
 
+
 class User(UserMixin):
     def __init__(self, user_id, name):
         self.id = str(user_id)
         self.name = name
+
 
     @staticmethod
     def get(user_id):
@@ -63,9 +65,11 @@ class User(UserMixin):
             return User(str(user_data["_id"]), user_data["name"])
         return None
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
+
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -82,12 +86,12 @@ def login():
         # Clear login-related flash messages
         session.pop('_flashes', None)
 
-        # Explicitly set session freshness to True
-        session['_fresh'] = True
 
+        session['_fresh'] = True
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
+
 
 
 
@@ -101,12 +105,14 @@ def check_session():
     return jsonify({"message": "Session checked"}), 200
 
 
+
 @app.route("/logout", methods=["POST"])
 @login_required
 def logout():
     logout_user()
-    print("Logged out. Session Data:", session)  # Debugging statement
+    print("Logged out. Session Data:", session) 
     return jsonify({"message": "Logout successful"}), 200
+
 
 #fix not json format
 def convert_objectid_to_str(data):
@@ -121,6 +127,8 @@ def convert_objectid_to_str(data):
             data[i] = convert_objectid_to_str(item)
     return data
 
+
+
 @app.route('/', methods=['GET'])
 @cache.cached(timeout=20, unless=lambda: request.args.get('nocache') == 'true')
 def main():
@@ -131,9 +139,8 @@ def main():
         print("Before Session Modification - Permanent:", session['_permanent'])
         print("Before Session Modification - Data:", session)
 
-        # Explicitly set session freshness to True
-        session['_fresh'] = True
 
+        session['_fresh'] = True
         delete_expired_posts(posts_collection)
         cursor = posts_collection.find()          # Find documents in the collection
         documents_list_normal = list(cursor)      # Convert the cursor to a list of documents
@@ -141,15 +148,15 @@ def main():
         for i, document in enumerate(documents_list_normal):
             documents_list_normal[i] = convert_objectid_to_str(document)
 
-            # Fetch the image data from GridFS
+            # Fetch the image data GridFS
             image_id = document.get("photos")
             image = grid_fs.get(ObjectId(image_id))
 
             if image:
-                # Convert bytes to base64-encoded string
+                # Convert bytes to encoded string
                 document["image_data"] = base64.b64encode(image.read()).decode('utf-8')
 
-        # Extract title, description, and photos fields from each document
+        # Extract title... fields from each document
         formatted_documents_list = [
             {
                 "title": doc.get("title", ""),
@@ -185,7 +192,7 @@ def posts():
         date_of_event = request.form.get('date')
 
         if title and description and photos:
-            # Save the uploaded file to GridFS
+            # Save the file to GridFS
             file_id = save_file_to_gridfs(photos)
 
             
@@ -197,7 +204,7 @@ def posts():
                 "date_for_event":date_of_event,
             }
 
-            # Insert the post data into the MongoDB collection
+            # Insert the post into the MongoDB
             _ = posts_collection.insert_one(post_data)
 
            
@@ -205,19 +212,20 @@ def posts():
             return jsonify({"message": "Post created successfully"}), 200
         
         else:
-            return jsonify({"error": "Missing required parameters"}), 400
-            
-           
+            return jsonify({"error": "Missing required parameters"}), 400   
 
     except Exception as e:
         print(f"Error in /posts route: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
 
+
 def save_file_to_gridfs(file: FileStorage):
-    # Save the file to GridFS and return the file_id
+    # Save in GridFS and return file_id
     file_id = grid_fs.put(file, filename=secure_filename(file.filename))
     return file_id
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
