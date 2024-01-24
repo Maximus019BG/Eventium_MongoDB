@@ -27,7 +27,7 @@ app.config['SESSION_COOKIE_NAME'] = 'eventium_session'
 app.config['SESSION_COOKIE_SAMESITE'] = None  
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=5)
 
-
+ 
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 Session(app)
 
