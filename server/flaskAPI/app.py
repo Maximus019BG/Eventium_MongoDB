@@ -24,7 +24,7 @@ from flask_login import login_user
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_NAME'] = 'eventium_session'
-app.config['SESSION_COOKIE_SAMESITE'] = 'Strict'
+app.config['SESSION_COOKIE_SAMESITE'] = None  
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=5)
 
 
@@ -51,12 +51,10 @@ users_collection = db["Users"]
 posts_collection = db["Posts"]
 grid_fs = GridFS(db)
 
-
 class User(UserMixin):
     def __init__(self, user_id, name):
         self.id = str(user_id)
         self.name = name
-
 
     @staticmethod
     def get(user_id):
@@ -65,11 +63,9 @@ class User(UserMixin):
             return User(str(user_data["_id"]), user_data["name"])
         return None
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
-
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -83,9 +79,11 @@ def login():
         user = User(str(user_data["_id"]), user_data["name"])
         login_user(user, fresh=True)
 
+        # Set the user's name in the session
+        session['name'] = user_data["name"]
+
         # Clear login-related flash messages
         session.pop('_flashes', None)
-
 
         session['_fresh'] = True
         return jsonify({"message": "Login successful"}), 200
@@ -95,23 +93,18 @@ def login():
 
 
 
-@app.route("/check_session" , methods=["GET", "POST"])
-@login_required  
-def check_session():
-    print("Session Fresh:", session["_fresh"])
-    print("Session Permanent:", session["_permanent"])
-    print("Session Data:", session)
-
-    return jsonify({"message": "Session checked"}), 200
-
-
-
-@app.route("/logout", methods=["POST"])
+@app.route("/check_session", methods=["GET", "POST"])
 @login_required
-def logout():
-    logout_user()
-    print("Logged out. Session Data:", session) 
-    return jsonify({"message": "Logout successful"}), 200
+def check_session():
+    if current_user.is_authenticated:
+        print("Session Fresh:", session["_fresh"])
+        print("Session Permanent:", session["_permanent"])
+        print("Session Data:", session)
+
+        return jsonify({"message": "Session checked"}), 200
+    else:
+        return jsonify({"message": "User not logged in"}), 401
+
 
 
 #fix not json format
