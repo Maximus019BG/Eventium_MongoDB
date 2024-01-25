@@ -85,7 +85,7 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div className='h-screen '>
+    <div className='h-screen dark:bg-slate-900 dark:text-white'>
       <NavBar />
 
       <div className='flex overflow-hidden'>

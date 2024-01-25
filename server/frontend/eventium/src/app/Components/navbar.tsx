@@ -6,7 +6,7 @@ import profile from '../images/profilePic.png';
 
 const NavBar: React.FC = () => {
   return (
-    <div className='bg-white fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300'>
+    <div className='bg-white fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300 dark:bg-slate-900 dark:text-white'>
      
       <div className='mx-auto flex space-x-8 font-bold font-sans uppercase text-md md:space-x-36 md:text-sd sm:space-x-16'>
         <Link href='/home'>
@@ -24,7 +24,7 @@ const NavBar: React.FC = () => {
         <Image
           src={profile}
           alt="Profile"
-          className='w-12 mr-2 sm:mr-12'
+          className='w-12 mr-2 sm:mr-12'   // Needs to be made so it can be seen in dark mode
         />
       </div>
     </div>

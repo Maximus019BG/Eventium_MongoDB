@@ -22,7 +22,7 @@ body {
 }
 
 .nav {
-  @apply relative ml-10 text-gray-500 text-lg font-mono font-bold tracking-[1px] hover:text-black
+  @apply relative ml-10 text-gray-500 text-lg font-mono font-bold tracking-[1px] hover:text-black dark:text-gray-300 dark:hover:text-white
 }
 .nav::after {
   @apply content-[''] bg-green-500 h-[2px] w-[0%] left-0 -bottom-[0px] rounded-xl absolute duration-300
