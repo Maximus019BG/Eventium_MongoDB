@@ -6,4 +6,4 @@ passlib
 pymongo
 Werkzeug
 Flask-Caching
-
+flask-bcrypt

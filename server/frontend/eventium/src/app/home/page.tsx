@@ -24,6 +24,9 @@ const Main: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/', {
+          headers: {
+            'Content-Type': 'application/json'
+          },
           withCredentials: true,
         });
     
@@ -60,6 +63,7 @@ const Main: React.FC = () => {
         }
       } catch (error) {
         console.error('Error checking session:', error);
+      
       }
     };
 

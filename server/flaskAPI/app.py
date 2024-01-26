@@ -2,7 +2,7 @@ import os
 import random
 import requests
 import base64
-from flask import Flask, jsonify, request, session, g
+from flask import Flask, jsonify, request, g
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from passlib.hash import bcrypt
@@ -20,27 +20,47 @@ from func.functions import is_event_past, delete_expired_posts
 from flask_caching import Cache
 from secrets import token_hex
 from flask_login import login_user
+from flask import session
+from flask_login import LoginManager
+from flask_login import UserMixin
+from flask import Flask, jsonify, request, session
+from flask_login import LoginManager, UserMixin, login_user
+from flask_bcrypt import Bcrypt
+from bson.objectid import ObjectId
+from pymongo import MongoClient
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_COOKIE_NAME'] = 'eventium_session'
 app.config['SESSION_COOKIE_SAMESITE'] = None  
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=5)
+app.config.from_object(__name__)
+app.permanent_session_lifetime = timedelta(days=7)
+
+
+Session(app)
+
+bcrypt = Bcrypt(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
  
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-Session(app)
+
 
 CORS(app, supports_credentials=True)
 
 app.register_blueprint(user_bp)  
-
 # session
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 # Flask-Login
 login_manager = LoginManager(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 login_manager.login_view = "login"
+login_manager.login_message = "Please log in to access this page."
+login_manager.session_protection = "strong"
 
 # MongoDB 
 password = os.environ.get("MONGODB_PWD")
@@ -52,58 +72,74 @@ posts_collection = db["Posts"]
 grid_fs = GridFS(db)
 
 class User(UserMixin):
-    def __init__(self, user_id, name):
-        self.id = str(user_id)
+    def __init__(self, id, name):
+        self.id = id
         self.name = name
 
-    @staticmethod
-    def get(user_id):
-        user_data = users_collection.find_one({"_id": ObjectId(user_id)})
-        if user_data:
-            return User(str(user_data["_id"]), user_data["name"])
-        return None
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def is_authenticated(self):
+        return True
+
+    def get_id(self):
+        return self.id
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    user_data = users_collection.find_one({"_id": ObjectId(user_id)})
+    if user_data:
+        return User(str(user_data["_id"]), user_data["name"])
+    return None
 
-@app.route("/login", methods=["POST", "GET"])
+@app.route("/login", methods=["POST","GET"])
 def login():
     data = request.get_json()
+    if not data:
+        return jsonify({"message": "Invalid request"}), 415
+
     name = data.get("name")
     password = data.get("password")
 
     user_data = users_collection.find_one({"name": name})
-
-    if user_data and bcrypt.verify(password, user_data.get("password")):
+    print(user_data)
+    if user_data and bcrypt.check_password_hash(user_data.get("password"), password):
         user = User(str(user_data["_id"]), user_data["name"])
-        login_user(user, fresh=True)
+        login_user(user, remember=True)
+        session['name'] = name
+        session['user_id'] = str(user_data["_id"])  # Store the user's ID, not the User object
+        session.permanent = True  
+        session.modified = True
+    
+       
+       
+        print(session['name'], session['user_id'])
 
-        # Set the user's name in the session
-        session['name'] = user_data["name"]
-
-        # Clear login-related flash messages
-        session.pop('_flashes', None)
-
-        session['_fresh'] = True
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
 
 
 
-
 @app.route("/check_session", methods=["GET", "POST"])
-@login_required
 def check_session():
-    if current_user.is_authenticated:
-        print("Session Fresh:", session["_fresh"])
-        print("Session Permanent:", session["_permanent"])
-        print("Session Data:", session)
+    if current_user:
+        session_info = {
+            "Session Data": dict(session),
+        }
 
-        return jsonify({"message": "Session checked"}), 200
+        # Check if 'user_id' is in the session
+        if 'name' in session:
+            session_info["Session User "] = session.get('name')
+        else:
+            session_info["No user_id in session."] = True
+        print (f"Name {session.get('name')}")
+        return jsonify(session_info), 200
     else:
-        return jsonify({"message": "User not logged in"}), 401
+        return jsonify({"message": "User not authenticated"}), 401
 
 
 
@@ -121,19 +157,13 @@ def convert_objectid_to_str(data):
     return data
 
 
-
 @app.route('/', methods=['GET'])
-@cache.cached(timeout=20, unless=lambda: request.args.get('nocache') == 'true')
+@cache.cached(timeout=20)
 def main():
     try:
         name = session.get('name', '')
 
-        print("Before Session Modification - Fresh:", session['_fresh'])
-        print("Before Session Modification - Permanent:", session['_permanent'])
-        print("Before Session Modification - Data:", session)
 
-
-        session['_fresh'] = True
         delete_expired_posts(posts_collection)
         cursor = posts_collection.find()          # Find documents in the collection
         documents_list_normal = list(cursor)      # Convert the cursor to a list of documents
@@ -159,9 +189,7 @@ def main():
             }
             for doc in documents_list_normal
         ]
-        print("After Session Modification - Fresh:", session['_fresh'])
-        print("After Session Modification - Permanent:", session['_permanent'])
-        print("After Session Modification - Data:", session)
+       
 
         # After the loop
         return jsonify({'documents': convert_objectid_to_str(formatted_documents_list)}), 200
@@ -170,7 +198,6 @@ def main():
     except Exception as e:
         print(f"Error in main route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
-
 
 
 

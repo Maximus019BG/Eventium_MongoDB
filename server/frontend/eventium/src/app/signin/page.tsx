@@ -27,7 +27,7 @@ const Signin: React.FC = () => {
   
       // Assuming the response contains a "message" indicating success
       if (response.data.message === "Login successful") {
-          // Redirect to '/home'
+          // Redirect 
           window.location.href = '/home';
       }
   })
