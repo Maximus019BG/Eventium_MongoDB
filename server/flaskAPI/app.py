@@ -2,7 +2,7 @@ import os
 import random
 import requests
 import base64
-from flask import Flask, jsonify, request, g
+from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from passlib.hash import bcrypt
@@ -31,19 +31,20 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7) 
 app.config['SESSION_COOKIE_NAME'] = 'eventium_session'
+app.config['SESSION_FILE_DIR'] = 'D:\\Eventium\\flask_session'
 app.config['SESSION_COOKIE_SAMESITE'] = None  
-app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=5)
 app.config.from_object(__name__)
-app.permanent_session_lifetime = timedelta(days=7)
-
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SECRET_KEY'] = 'your secret key'
 
 Session(app)
 
-bcrypt = Bcrypt(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
 
+
+bcrypt = Bcrypt(app)
  
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
@@ -52,12 +53,12 @@ CORS(app, supports_credentials=True)
 
 app.register_blueprint(user_bp)  
 # session
-app.secret_key = os.environ.get("FLASK_SECRET_KEY")
+app.secret_key = 'your secret key'
 
 # Flask-Login
+
 login_manager = LoginManager(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
+
 login_manager.login_view = "login"
 login_manager.login_message = "Please log in to access this page."
 login_manager.session_protection = "strong"
@@ -70,29 +71,20 @@ db = client["EventiumDatabase"]
 users_collection = db["Users"] 
 posts_collection = db["Posts"]
 grid_fs = GridFS(db)
+api = os.environ.get("API")
 
 class User(UserMixin):
-    def __init__(self, id, name):
+    def __init__(self, id, name, email):
         self.id = id
         self.name = name
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def is_authenticated(self):
-        return True
-
-    def get_id(self):
-        return self.id
+        self.email = email
+               
 
 @login_manager.user_loader
 def load_user(user_id):
     user_data = users_collection.find_one({"_id": ObjectId(user_id)})
     if user_data:
-        return User(str(user_data["_id"]), user_data["name"])
+        return User(str(user_data["_id"]), user_data["name"], user_data["email"])
     return None
 
 @app.route("/login", methods=["POST","GET"])
@@ -105,42 +97,57 @@ def login():
     password = data.get("password")
 
     user_data = users_collection.find_one({"name": name})
-    print(user_data)
-    if user_data and bcrypt.check_password_hash(user_data.get("password"), password):
-        user = User(str(user_data["_id"]), user_data["name"])
-        login_user(user, remember=True)
-        session['name'] = name
-        session['user_id'] = str(user_data["_id"])  # Store the user's ID, not the User object
-        session.permanent = True  
+    authentication_successful = user_data and bcrypt.check_password_hash(user_data.get("password"), password)
+  
+    if authentication_successful:
+        user = User(str(user_data["_id"]), user_data["name"],user_data["email"])
+        session['name'] = user.name
+        session['user_id'] = str(user.id)
         session.modified = True
-    
-       
-       
-        print(session['name'], session['user_id'])
-
-        return jsonify({"message": "Login successful"}), 200
+        session.permanent = True
+        login_user(user, remember=True)        
+        response = make_response(jsonify({"message": "Login successful"}), 200)
+        response.set_cookie('name', session['name'])
+        
+        response2 = requests.post(f'{api}/check_session', json={"name": session['name']})
+        print(response2.text)  # print the response from /check_session
+        return response,200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
-
-
-
+ 
 @app.route("/check_session", methods=["GET", "POST"])
 def check_session():
-    if current_user:
-        session_info = {
-            "Session Data": dict(session),
-        }
+    if request.method == "POST":
+        data = request.get_json()
+        if data and 'name' in data:
+            session['name'] = data['name']
+            response = requests.post(f'{api}/', json={"name": session['name']})
+            if current_user:
+                session_info = {
+                "Session Data": dict(session),
+                 }
 
-        # Check if 'user_id' is in the session
-        if 'name' in session:
-            session_info["Session User "] = session.get('name')
+                # Check if 'user_id' is in the session
+                if 'name' in session:
+                    session_info["Session User "] = session.get('name')
+                else:
+                    session_info["No user_id in session."] = True
+                print (f"Name {session.get('name')}")
+                return jsonify(session_info), 200
+    
+    name = session.get('name')
+   
+    if request.method == "GET":
+        if name:
+            print (name)
+            return jsonify({"message": "User is logged in"}), 200
         else:
-            session_info["No user_id in session."] = True
-        print (f"Name {session.get('name')}")
-        return jsonify(session_info), 200
+            return jsonify({"message": "User is not logged in"}), 401
+        
     else:
         return jsonify({"message": "User not authenticated"}), 401
 
+   
 
 
 #fix not json format
@@ -157,11 +164,12 @@ def convert_objectid_to_str(data):
     return data
 
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET','POST'])
 @cache.cached(timeout=20)
 def main():
     try:
-        name = session.get('name', '')
+        data = request.get_json()
+        name = data.get('name') if data else None
 
 
         delete_expired_posts(posts_collection)
@@ -192,7 +200,7 @@ def main():
        
 
         # After the loop
-        return jsonify({'documents': convert_objectid_to_str(formatted_documents_list)}), 200
+        return jsonify({'documents': convert_objectid_to_str(formatted_documents_list), 'name': name}), 200
 
 
     except Exception as e:

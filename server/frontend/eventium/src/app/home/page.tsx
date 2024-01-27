@@ -29,46 +29,49 @@ const Main: React.FC = () => {
           },
           withCredentials: true,
         });
+
+        if (response.status === 500) {
+          window.location.href = '/signin';
+          return;
+        }
     
         if (isMounted) {
           setUsername(response.data.name);
           setDocuments(response.data.documents);
           setLoading(false);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        if (isMounted) {
-          setError('Error fetching data. Please try again later.');
-          setLoading(false);
-        }
-      }
-    };
-    
-    const checkSession = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/check_session', {
-          withCredentials: true,
-        });
-        console.log('Session Check Response:', response.data);
-        console.log('Headers:', response.headers);
-    
-        if (isMounted) {
-          if (response.data.message === "Session active") {
-            setAuthenticated(true);
-            setUsername(response.data.name);
-          } else {
-            setAuthenticated(false);
-            setUsername(null);
-          }
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
-      
-      }
-    };
+          console.log(response.data.name)
+         
 
+         // Check for new storage
+         const storedName = localStorage.getItem('name');
+
+         if (storedName !== response.data.name) {
+          localStorage.removeItem('name');
+          const welcomeMessage = `Добре дошли "${response.data.name}"! `;
+          localStorage.setItem('name', response.data.name); 
+          console.log(welcomeMessage);
+        }
+
+         else if (storedName === null) {
+          
+          window.location.href = '/signin';
+          console.log('Впишете се!');
+        }
+         else if (storedName === response.data.name) {
+          const response = `Здравейте отново ${storedName}! `;
+          console.log(response);
+         }
+        }
+      } catch (error:any) {
+        console.error('Error fetching data:', error);
+        if (error.response && error.response.status === 500) {
+          window.location.href = '/signin';
+        }
+      }
+    };
+    
     fetchData();
-    checkSession();
+   
 
     return () => {
       isMounted = false;
@@ -91,7 +94,16 @@ const Main: React.FC = () => {
   return (
     <div className='h-screen dark:bg-slate-900 dark:text-white'>
       <NavBar />
-
+          {/* Ako shte go slagash nqkyde IMETo <p>{name}</p> I POSLE IZTRIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          */}
       <div className='flex overflow-hidden'>
         <SideBar />
 
@@ -111,7 +123,7 @@ const Main: React.FC = () => {
               <div key={index} className='mb-6 pt-6  pr-6 shadow-sm shadow-slate-300 rounded-xl w-11/12'>
                 <h1 className='font-semibold text-xl pl-6 w-screen'>{document.title}</h1>
                 <p className='mt-2 pl-6 w-screen'>{document.description}</p>
-
+                
                 {document.image_data && (
                   <Image
                     src={`data:image/png;base64,${document.image_data}`}
@@ -120,6 +132,7 @@ const Main: React.FC = () => {
                     height={300}
                     className='mt-4 rounded-bl-xl '
                   />
+                  
                 )}
               </div>
             ))}
