@@ -13,29 +13,21 @@ const Signin: React.FC = () => {
     event.preventDefault();
 
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-    
+    if (localStorage.getItem('name') !== null){
+      window.location.href = '/home';
+        
+    }
     axios.post(`${apiUrl}/login`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
       name: username,
-      password: password,
-  })
-  .then((response) => {
-      // Handle the response if needed
-      console.log(response.data);
-  
-      // Assuming the response contains a "message" indicating success
-      if (response.data.message === "Login successful") {
-          // Redirect 
-          window.location.href = '/home';
+      password: password
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
       }
-  })
-  .catch((error) => {
-      // Handle errors
-      console.error(error);
-  });
-  };
+    })
+    .then(response => console.log(response.data))
+    .catch(error => console.error('Error:', error));
+  }; 
 
   return (
     <div className="flex h-screen">

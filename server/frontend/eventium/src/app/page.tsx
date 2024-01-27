@@ -18,7 +18,10 @@ const Home: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const errorI =  console.error("Invalid input. Please fill in all the required fields.");
- 
+  if (localStorage.getItem('name') !== null){
+    window.location.href = '/home';
+      
+  }
   
  // useEffect to Google API library
  useEffect(() => {

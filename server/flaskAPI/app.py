@@ -87,14 +87,13 @@ def load_user(user_id):
         return User(str(user_data["_id"]), user_data["name"], user_data["email"])
     return None
 
-@app.route("/login", methods=["POST","GET"])
+@app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     if not data:
-        return jsonify({"message": "Invalid request"}), 415
-
-    name = data.get("name")
-    password = data.get("password")
+        return jsonify({'message': 'No input data provided'}), 400
+    name = data.get('username')
+    password = data.get('password')
 
     user_data = users_collection.find_one({"name": name})
     authentication_successful = user_data and bcrypt.check_password_hash(user_data.get("password"), password)

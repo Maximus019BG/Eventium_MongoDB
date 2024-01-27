@@ -82,8 +82,9 @@ const Main: React.FC = () => {
     try {
       await axios.post('http://localhost:5000/logout', null, {
         withCredentials: true,
+        
       });
-
+      localStorage.removeItem('name');
       setAuthenticated(false);
       setUsername(null);
     } catch (error) {
