@@ -6,7 +6,7 @@ import profile from '../images/profilePic.png';
 
 const NavBar: React.FC = () => {
   return (
-    <div className='bg-white fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300 dark:bg-slate-900 dark:text-white'>
+    <div className='bg-white fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300'>
      
       <div className='mx-auto flex space-x-8 font-bold font-sans uppercase text-md md:space-x-36 md:text-sd sm:space-x-16'>
         <Link href='/home'>
