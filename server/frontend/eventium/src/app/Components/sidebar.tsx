@@ -4,9 +4,12 @@ import React, { useState, useEffect  } from 'react';
 
 const SideBar: React.FC = () => {
   const [isSpanClicked, setIsSpanClicked] = useState<boolean[]>([false, false, false]);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(
-    localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
-  );
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (isDarkMode) {
@@ -32,7 +35,7 @@ const SideBar: React.FC = () => {
   const filters = ['Filter 1', 'Filter 2', 'Filter 3', 'Filter 4']; // From here you can change filters
   
   return (
-    <div className={`flex flex-col items-start mt-[48px] fixed h-screen z-6 w-60 text-2xl pt-4 ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`flex flex-col items-start mt-[48px] fixed h-screen z-6 w-60 text-2xl shadow-slate-400 pt-4 ${isDarkMode ? 'dark' : ''}`}>
       <h1 className={`mb-4 ml-5 text-4xl ${isDarkMode ? 'text-white' : 'text-black'}`}>Filters</h1>
 
       {filters.map((filter, index) => (
