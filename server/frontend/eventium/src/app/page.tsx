@@ -46,7 +46,7 @@ const Home: React.FC = () => {
 const handleSignUp = async (event: React.FormEvent) => {
   event.preventDefault(); // Prevent the default form submission behavior
 
-  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const apiUrl = process.env.REACT_APP_API_URL ;
 
   try {
     const response = await axios.post(`${apiUrl}/user/signup`, {

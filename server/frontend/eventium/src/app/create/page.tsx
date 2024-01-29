@@ -10,6 +10,7 @@ const Create: React.FC = () => {
   const [photos, setPhotos] = useState<File | null>(null);
   const [date, setdate] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
+ 
 
   const handleSignUp = async () => {
     try {
@@ -18,7 +19,7 @@ const Create: React.FC = () => {
         return;
       }
 
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const apiUrl = process.env.REACT_APP_API_URL;
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);

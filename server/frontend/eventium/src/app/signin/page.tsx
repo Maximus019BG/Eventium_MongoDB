@@ -8,11 +8,12 @@ import img from '../images/register.jpg';
 const Signin: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const apiUrl = process.env.REACT_APP_API_URL ;
 
   const handleSignIn = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+   
     
     axios.post(`${apiUrl}/login`, {
       headers: {

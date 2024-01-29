@@ -6,6 +6,7 @@ import profile from '../images/profilePic.png';
 
 const NavBar: React.FC = () => {
   const router = useRouter();
+  
 
   const navigateTo = (path: string) => {
     router.push(path);

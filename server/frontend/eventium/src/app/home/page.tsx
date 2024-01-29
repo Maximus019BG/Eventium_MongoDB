@@ -19,6 +19,7 @@ const Main: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const router = useRouter(); 
+  const apiUrl = process.env.REACT_APP_API_URL ;
 
   useEffect(() => {
    
@@ -37,7 +38,7 @@ const Main: React.FC = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/', {
+        const response = await axios.get(`${apiUrl}/`, {
           headers: {
             'Content-Type': 'application/json'
           },
@@ -91,7 +92,7 @@ const Main: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:5000/logout', null, {
+      await axios.post(`${apiUrl}/logout`, null, {
         withCredentials: true,
       });
 
