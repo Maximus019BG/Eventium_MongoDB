@@ -93,7 +93,7 @@ const Main: React.FC = () => {
   const handleLogout = async () => {
     try {
       await axios.post(`${apiUrl}/logout`, null, {
-        withCredentials: true,
+        withCredentials: true, 
       });
 
       setAuthenticated(false);
