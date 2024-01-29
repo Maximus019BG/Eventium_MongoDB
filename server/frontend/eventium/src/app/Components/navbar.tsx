@@ -1,23 +1,23 @@
 'use client'
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import profile from '../images/profilePic.png';
 
 const NavBar: React.FC = () => {
+  const router = useRouter();
+
+  const navigateTo = (path: string) => {
+    router.push(path);
+  };
+
   return (
-    <div className='bg-white fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300'> 
+    <div className='bg-white dark:bg-gray-800 fixed w-screen flex items-center justify-between z-10 shadow-sm shadow-slate-300'> 
     
-      <div className='mx-auto flex space-x-8 font-bold font-sans uppercase text-md md:space-x-36 md:text-sd sm:space-x-16'>
-        <Link href='/home'>
-          <h1 className='nav'>Home</h1>
-        </Link>
-        <Link href='/create'>
-          <h1 className='nav'>Create</h1>
-        </Link>
-        <Link href='#'>
-          <h1 className='nav'>Chat</h1>
-        </Link>
+      <div className='mx-auto flex space-x-8 font-bold font-sans uppercase text-md text-black dark:text-white md:space-x-36 md:text-sd sm:space-x-16'>
+        <h1 className='nav cursor-default' onClick={() => navigateTo('/home')}>Home</h1>
+        <h1 className='nav cursor-default' onClick={() => navigateTo('/create')}>Create</h1>
+        <h1 className='nav cursor-default' onClick={() => navigateTo('/chat')}>Chat</h1>
       </div>
        
       <div className='ml-auto flex items-center'>

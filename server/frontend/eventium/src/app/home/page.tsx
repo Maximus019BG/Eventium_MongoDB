@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import NavBar from '../Components/navbar';
 import SideBar from '../Components/sidebar';
 
@@ -10,13 +11,26 @@ interface DateInputProps {
   onDateChange: (date: Date) => void;
 }
 
-
 const Main: React.FC = () => {
   const [name, setUsername] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [documents, setDocuments] = useState<any[] | null>(null);
   const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const router = useRouter(); 
+
+  useEffect(() => {
+   
+  }, []);
+  
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
     let isMounted = true;
@@ -31,52 +45,49 @@ const Main: React.FC = () => {
         });
 
         if (response.status === 500) {
-          window.location.href = '/signin';
+          router.push('/signin'); // Use router directly
           return;
         }
-    
+
         if (isMounted) {
           setUsername(response.data.name);
           setDocuments(response.data.documents);
           setLoading(false);
           console.log(response.data.name)
-         
 
-         // Check for new storage
-         const storedName = localStorage.getItem('name');
+          // Check for new storage
+          const storedName = localStorage.getItem('name');
 
-         if (storedName !== response.data.name) {
-          localStorage.removeItem('name');
-          const welcomeMessage = `Добре дошли "${response.data.name}"! `;
-          localStorage.setItem('name', response.data.name); 
-          console.log(welcomeMessage);
-        }
+          if (storedName !== response.data.name) {
+            localStorage.removeItem('name');
+            const welcomeMessage = `Добре дошли "${response.data.name}" !`;
+            localStorage.setItem('name', response.data.name); 
+            console.log(welcomeMessage);
+          }
 
-         else if (storedName === null) {
-          
-          window.location.href = '/signin';
-          console.log('Впишете се!');
-        }
-         else if (storedName === response.data.name) {
-          const response = `Здравейте отново ${storedName}! `;
-          console.log(response);
-         }
+          else if (storedName === null) {
+            router?.push('/signin');
+            console.log('Впишете се!');
+          }
+          else if (storedName === response.data.name) {
+            const response = `Здравейте отново ${storedName}! `;
+            console.log(response);
+          }
         }
       } catch (error:any) {
         console.error('Error fetching data:', error);
         if (error.response && error.response.status === 500) {
-          window.location.href = '/signin';
+          router.push('/signin'); // Use router directly
         }
       }
     };
-    
+
     fetchData();
-   
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     try {
@@ -92,19 +103,8 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div className='h-screen '>
+    <div className={`h-screen dark:bg-black  `}>
       <NavBar />
-          {/* Ako shte go slagash nqkyde IMETo <p>{name}</p> I POSLE IZTRIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-          ok
-          */}
       <div className='flex overflow-hidden'>
         <SideBar />
 
@@ -133,7 +133,6 @@ const Main: React.FC = () => {
                     height={300}
                     className='mt-4 rounded-bl-xl '
                   />
-                  
                 )}
               </div>
             ))}
