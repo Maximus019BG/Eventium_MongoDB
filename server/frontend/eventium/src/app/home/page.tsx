@@ -92,7 +92,7 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div className='h-screen dark:bg-slate-900 dark:text-white'>
+    <div className='h-screen '>
       <NavBar />
           {/* Ako shte go slagash nqkyde IMETo <p>{name}</p> I POSLE IZTRIIIIIII
           IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
@@ -103,6 +103,7 @@ const Main: React.FC = () => {
           IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
           IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
           IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+          ok
           */}
       <div className='flex overflow-hidden'>
         <SideBar />
