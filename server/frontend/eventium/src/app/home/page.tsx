@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import NavBar from '../Components/navbar';
 import SideBar from '../Components/sidebar';
-import configAPI from '../../config';
+import configAPI from '../../.config';
 
 
 interface DateInputProps {

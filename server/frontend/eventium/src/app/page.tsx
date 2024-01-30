@@ -6,7 +6,7 @@ import img from './images/register.jpg';
 import logo from './images/logo.png';
 import Main from './signin/page';
 import Link from 'next/link';
-import configAPI from '../config';
+import configAPI from '../.config';
 
 
 

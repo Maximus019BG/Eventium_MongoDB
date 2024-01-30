@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import img from '../images/register.jpg';
-import configAPI from '../../config';
+import configAPI from '../../.config';
 
 
 const Signin: React.FC = () => {

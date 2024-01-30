@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import NavBar from '../Components/navbar';
 import DateInput from '../Components/dateInput';
-import configAPI from '../../config';
+import configAPI from '../../.config';
 
 const Create: React.FC = () => {
   const [title, setTitle] = useState<string>('');
