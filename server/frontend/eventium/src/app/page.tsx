@@ -6,6 +6,7 @@ import img from './images/register.jpg';
 import logo from './images/logo.png';
 import Main from './signin/page';
 import Link from 'next/link';
+import configAPI from '../config';
 
 
 
@@ -46,7 +47,7 @@ const Home: React.FC = () => {
 const handleSignUp = async (event: React.FormEvent) => {
   event.preventDefault(); // Prevent the default form submission behavior
 
-  const apiUrl = process.env.REACT_APP_API_URL ;
+   const apiUrl = configAPI.apiUrl ;
 
   try {
     const response = await axios.post(`${apiUrl}/user/signup`, {

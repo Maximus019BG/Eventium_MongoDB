@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import NavBar from '../Components/navbar';
 import SideBar from '../Components/sidebar';
+import configAPI from '../../config';
 
 
 interface DateInputProps {
@@ -19,7 +20,7 @@ const Main: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const router = useRouter(); 
-  const apiUrl = process.env.REACT_APP_API_URL ;
+   const apiUrl = configAPI.apiUrl ;
 
   useEffect(() => {
    

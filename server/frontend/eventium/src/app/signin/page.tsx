@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import img from '../images/register.jpg';
+import configAPI from '../../config';
 
 
 const Signin: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const apiUrl = process.env.REACT_APP_API_URL ;
+  const apiUrl = configAPI.apiUrl ;
 
   const handleSignIn = (event: React.FormEvent) => {
     event.preventDefault();

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import NavBar from '../Components/navbar';
 import DateInput from '../Components/dateInput';
+import configAPI from '../../config';
 
 const Create: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -10,7 +11,7 @@ const Create: React.FC = () => {
   const [photos, setPhotos] = useState<File | null>(null);
   const [date, setdate] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
- 
+  const apiUrl = configAPI.apiUrl;
 
   const handleSignUp = async () => {
     try {
@@ -19,7 +20,7 @@ const Create: React.FC = () => {
         return;
       }
 
-      const apiUrl = process.env.REACT_APP_API_URL;
+      
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
