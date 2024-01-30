@@ -6,4 +6,4 @@ const config: Config = {
   apiUrl: 'http://localhost:5000',
 };
 
-export default config;
+export default config; 
