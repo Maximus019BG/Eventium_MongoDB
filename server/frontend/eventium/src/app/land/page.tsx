@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import NavBar from '../Components/navbar';
 import SideBar from '../Components/sidebar';
 import configAPI from '../../.config';
+import LandIMG from '../images/land.svg';
 
 
 interface DateInputProps {
@@ -107,42 +108,25 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div className={`h-screen dark:bg-black  `}>
-      <NavBar />
-      <div className='flex overflow-hidden'>
-        <SideBar />
+    <div className='h-screen dark:bg-black  '>
+        <section className='-mt-0'>
+        <Image
+          src={LandIMG}
+          alt="LandPage"
+          className=""
+          width={1000}
+          height={900}
+        />
+        </section>
+      <div className='flex absolute top-96 overflow-hidden'>
+        <section className=''>
+            <h1 className='font-extrabold text-7xl '>Добре дошли в Евентиум!</h1>
+            <h2 className='font-extrabold text-5xl mt-2'>Уеб приложението за събития!</h2>
+        </section>
 
-        {loading && <p>Loading data...</p>}
-        {error && <p>{error}</p>}
-
-        {authenticated && (
-          <p>
-            Welcome, {name}!{' '}
-            <button onClick={handleLogout}>Logout</button>
-          </p>
-        )}
-
-        {documents && (
-          <div className='ml-80 mt-36  mr-10 mb-2 w-5/6'>
-            {documents.map((document, index) => (
-              <div key={index} className='mb-6 pt-6  pr-6 shadow-sm shadow-slate-300 rounded-xl w-11/12'>
-                <h1 className='font-semibold text-xl pl-6 w-screen'>{document.title}</h1>
-                <p className='mt-2 pl-6 w-screen'>{document.description}</p>
-                
-                {document.image_data && (
-                  <Image
-                    src={`data:image/png;base64,${document.image_data}`}
-                    alt={`Image ${index}`}
-                    width={300}
-                    height={300}
-                    className='mt-4 rounded-bl-xl '
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+        
       </div>
+
     </div>
   );
 };
