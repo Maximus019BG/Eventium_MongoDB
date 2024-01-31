@@ -4,6 +4,8 @@ import axios from 'axios';
 import NavBar from '../Components/navbar';
 import DateInput from '../Components/dateInput';
 import configAPI from '../../.config';
+import FilePhoto from '../images/Upload.png';
+import Image from 'next/image';
 
 const Create: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -54,55 +56,68 @@ const Create: React.FC = () => {
   return (
     <>
       <NavBar />
-      <div className='w-5/6 h-5/6 shadow-sm shadow-slate-300 rounded-xl mx-36 p-24'>
-        <h1 className='my-10 font-bold'>Създай пост</h1>
-        <form onSubmit={handleSignUp}>
-          <div>
-            <input
-              type='text'
-              id='title'
-              name='title'
-              className='mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm focus:outline-none'
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              placeholder='Заглавие'
-            />
-          </div>
+      <div className='flex w-5/6 h-5/6 shadow-sm shadow-slate-300 rounded-xl mx-36 p-24 justify-between'>
+        <div className=' w-full'>
+          <h1 className='my-10 font-bold '>Създай пост</h1>
+            <form onSubmit={handleSignUp}>
+              <div>
+              <input
+                type='text'
+                id='title'
+                name='title'
+                className='mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm focus:outline-none'
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                placeholder='Заглавие'
+              />
+              </div>
 
-          <div className='my-12'>
-            <input
-              type='text'
-              id='description'
-              name='description'
-              className='mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm focus:outline-none '
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              placeholder='Описание'
-            />
-          </div>
+              <div className='my-12'>
+              <input
+                type='text'
+                id='description'
+                name='description'
+                className='mt-1 p-2 w-full border-b-2 border-b-green-500 rounded-sm text-sm focus:outline-none '
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                placeholder='Описание'
+              />
+              </div>
 
-          <DateInput onDateChange={handleDateChange } />
+              
 
-          <div className='my-12 '>
-            <input
-              type='file'
-              id='photo'
-              name='photo'
-              className='mt-1 p-2 w-full text-sm focus:outline-none'
-              onChange={handleFileChange}
-            />
-          </div>
-          
-          <div className='flex items-center justify-between mt-4 mb-3'>
-            <input
-              type='submit'
-              value='Създай пост'
-              className='bg-green-500 text-white font-semibold p-4 rounded-lg -ml-[2px] cursor-pointer text-bold hover:bg-green-600 text-md'
-            />
-          </div>
-        </form>
+              <DateInput onDateChange={handleDateChange } />
+
+                <div className='flex items-center justify-between mt-4 mb-3'>
+                  <input
+                    type='submit'
+                    value='Създай пост'
+                    className='bg-green-500 text-white font-semibold p-4 rounded-lg -ml-[2px] cursor-pointer text-bold hover:bg-green-600 text-md'
+                  />
+                </div>
+              </form>
+            </div>
+            <div className='flex-shrink-0 ml-4'>
+              <label className='flex flex-col items-center justify-center w-full h-96 border-2 border-green-600 border-dashed rounded-lg cursor-pointer bg-green-400 px-1/2 ml-16 '>
+                <div className='flex flex-col items-center justify-center pt-5 pb-6'>
+                  <Image
+                    src={FilePhoto}
+                    alt="Signin2"
+                    className="w-24 my-2 "
+                  />
+                  <p className='mb-2 text-sm text-white'><span className='font-semibold'>Click to upload</span> or drag and drop</p>
+                </div>
+                <input
+                  type='file'
+                  id='photo'
+                  name='photo'
+                  className='hidden'
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
       </div>
     </>
   );
