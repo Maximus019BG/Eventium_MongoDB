@@ -1,4 +1,10 @@
-{
+{ 
+  
+  "dependencies": {
+  "@types/three": "^0.149.0", 
+  "three": "^0.150.1" 
+  // or the latest version(s) at the moment
+},
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

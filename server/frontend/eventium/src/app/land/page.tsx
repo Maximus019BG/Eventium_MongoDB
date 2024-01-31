@@ -1,17 +1,20 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react'; // Added useRef import
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import NavBar from '../Components/navbar';
 import SideBar from '../Components/sidebar';
 import configAPI from '../../.config';
-import LandIMG from '../images/land.svg';
-
+import videoFile from '../videos/BackGLand.mp4';
+import PlayerFn from '../land/Video';
+import ReactPlayer from 'react-player';
 
 interface DateInputProps {
   onDateChange: (date: Date) => void;
 }
+
+
 
 const Main: React.FC = () => {
   const [name, setUsername] = useState<string | null>(null);
@@ -109,24 +112,24 @@ const Main: React.FC = () => {
 
   return (
     <div className='h-screen dark:bg-black  '>
-        <section className='-mt-0'>
-        <Image
-          src={LandIMG}
-          alt="LandPage"
-          className=""
-          width={1000}
-          height={900}
-        />
-        </section>
+       <section className='-mt-0'>
+      
+        <video src={require('../videos/BackGLand.mp4')} autoPlay muted loop className='-mt-10 fix ' />
+       </section>
       <div className='flex absolute top-96 overflow-hidden'>
-        <section className=''>
-            <h1 className='font-extrabold text-7xl '>Добре дошли в Евентиум!</h1>
-            <h2 className='font-extrabold text-5xl mt-2'>Уеб приложението за събития!</h2>
+        <section className='mt-96'>
+            <h1 className='mt-16 font-extrabold text-7xl flex text-white -mb-3 uppercase'>Добре дошли в&nbsp;<p className='bg-gradient-to-r from-green-400 via-teal-300 to-emerald-300 bg-clip-text text-transparent'>Евентиум</p></h1>
+            <h2 className='font-extrabold text-5xl mt-2 text-white uppercase flex'>Уеб приложението за <p className='bg-gradient-to-r from-green-400 via-teal-300 to-emerald-300 bg-clip-text text-transparent'>събития</p></h2>
+            <section className=' -mt-2 bg-white w-screen -ml-17 '>
+        
+        <br></br>
+        <br></br><br></br><br></br>
+        
         </section>
-
+        </section>
         
       </div>
-
+      
     </div>
   );
 };

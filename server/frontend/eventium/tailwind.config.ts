@@ -1,11 +1,12 @@
 import type { Config } from 'tailwindcss'
 
+
 const config: Config = {
-    content: [
-      './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-      './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-      './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    ],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   darkMode: 'class', // This enables dark mode
   theme: {
     extend: {
@@ -14,9 +15,24 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      textColor: {
+        'transparent-to-white': 'transparent',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+    function({ addUtilities }: { addUtilities: any }) {
+      const newUtilities = {
+        '.text-gradient': {
+          'background-clip': 'text',
+          '-webkit-background-clip': 'text', /* For Safari and older Chrome */
+          'text-fill-color': 'transparent',
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 }
 
 export default config
