@@ -43,11 +43,11 @@ body {
 /* Light Mode */
 .light {
   background-color: white;
-  color: black;
+  
 }
 
 /* Dark Mode */
 .dark {
   background-color: #1a1a1a;
-  color: white;
+  
 }
