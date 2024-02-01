@@ -7,6 +7,7 @@ from user.routes import user_bp  # Import user_bp directly
 from pymongo import MongoClient
 from user.models import User  # Import the User class
 from datetime import datetime, date
+import requests
 
 app = Flask(__name__)
 CORS(app)

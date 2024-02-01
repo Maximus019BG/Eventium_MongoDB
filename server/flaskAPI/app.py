@@ -110,7 +110,7 @@ def login():
         response.set_cookie('name', session['name'])
         
         response2 = requests.post(f'{api}/check_session', json={"name": session['name']})
-        print(response2.text)  # print the response from /check_session
+        
         return response,200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
@@ -132,14 +132,14 @@ def check_session():
                     session_info["Session User "] = session.get('name')
                 else:
                     session_info["No user_id in session."] = True
-                print (f"Name {session.get('name')}")
+            
                 return jsonify(session_info), 200
     
     name = session.get('name')
    
     if request.method == "GET":
         if name:
-            print (name)
+            
             return jsonify({"message": "User is logged in"}), 200
         else:
             return jsonify({"message": "User is not logged in"}), 401
