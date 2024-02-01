@@ -20,7 +20,7 @@ const Main: React.FC = () => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const router = useRouter(); 
-   const apiUrl = configAPI.apiUrl ;
+  const apiUrl = configAPI.apiUrl ;
 
   useEffect(() => {
    
@@ -47,7 +47,7 @@ const Main: React.FC = () => {
         });
 
         if (response.status === 500) {
-          router.push('/signin'); // Use router directly
+          router.push('/home'); 
           return;
         }
 

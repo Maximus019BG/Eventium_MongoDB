@@ -6,6 +6,7 @@ import DateInput from '../Components/dateInput';
 import configAPI from '../../.config';
 import FilePhoto from '../images/Upload.png';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const Create: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -14,7 +15,10 @@ const Create: React.FC = () => {
   const [date, setdate] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
   const apiUrl = configAPI.apiUrl;
+  const storedName = localStorage.getItem('name') || '';
+  const router = useRouter();
 
+  console.log(storedName)
   const handleSignUp = async () => {
     try {
       if (!date) {
@@ -33,8 +37,12 @@ const Create: React.FC = () => {
       }
 
       await axios.post(`${apiUrl}/posts`, formData);
-      // Redirect only after a successful request
-      window.location.href = '/home';
+
+      localStorage.setItem('name', storedName);
+      router.push('/home');
+      
+      
+      
     } catch (error) {
       console.error(error);
       setError('Error creating post. Please try again later.');

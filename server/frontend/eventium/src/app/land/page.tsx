@@ -50,10 +50,6 @@ const Main: React.FC = () => {
           withCredentials: true,
         });
 
-        if (response.status === 500) {
-          router.push('/signin'); // Use router directly
-          return;
-        }
 
         if (isMounted) {
           setUsername(response.data.name);
