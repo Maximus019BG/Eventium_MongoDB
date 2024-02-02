@@ -13,6 +13,7 @@
     "react-dom": "^18.2.0",
     "react-player": "^2.14.1",
     "react-three-fiber": "^5.3.10",
+    "sharp": "^0.33.2",
     "three": "^0.161.0"
   },
   "devDependencies": {

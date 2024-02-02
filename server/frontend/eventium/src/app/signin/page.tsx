@@ -44,12 +44,14 @@ const Signin: React.FC = () => {
   
       {/* IMG */}
       <div className="w-full md:w-3/5 hidden md:block overflow-hidden">
-        <Image
-          src={img}
-          alt="Signin"
-          className="w-full h-full object-cover"
+      <video src={require('../videos/Signin.mp4')} 
+          autoPlay 
+          muted 
+          loop
+          className="w-full -top-1 h-full object-cover border-none"
         />
       </div>
+    
   
       {/* TEXT */}
       <div className="w-full md:w-2/5 p-4 bg-white flex justify-center items-center flex-col mt-28 pb-20">
@@ -101,23 +103,15 @@ const Signin: React.FC = () => {
   
         </form>
 
-         {/* IMG with Gradient */}
-    <div className='w-screen -mt-8'>
-         <div
-          className='w-screen absolute mt-11/12 h-1/3 xl:hidden md:w-0 sm:w-screen sm: overflow-shown mx-0 -mb-20 z-10'
-          style={{
-            background: 'linear-gradient(to bottom, white, rgba(255, 255, 255, 0))', // Replace with your desired gradient colors
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-           }}
-          />
-        </div>
+        
+   
          {/* small divice background */}
         <div className='w-screen  h-2/3 xl:hidden md:w-0 sm:w-screen sm: overflow-clip mx-0 -mb-20 '> 
-        <Image
-          src={img}
-          alt="Signin2"
-          className="w-full h-full object-cover"
+        <video src={require('../videos/Signin.mp4')} 
+          autoPlay 
+          muted 
+          loop
+          className="w-full h-full object-cover border-none"
         />
         </div>
       </div>
