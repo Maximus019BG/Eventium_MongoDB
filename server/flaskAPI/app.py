@@ -193,7 +193,9 @@ def main():
                 "title": doc.get("title", ""),
                 "description": doc.get("description", ""),
                 "photos": doc.get("photos", ""),
-                "image_data": doc.get("image_data", "")
+                "image_data": doc.get("image_data", ""),
+                "created_at": doc.get("created_at", ""),
+                "date_for_event": doc.get("date_for_event", "")
             }
             for doc in documents_list_normal
         ]
