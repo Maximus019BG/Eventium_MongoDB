@@ -171,7 +171,6 @@ def main():
         data = request.get_json()
         name = data.get('name') if data else None
 
-
         delete_expired_posts(posts_collection)
         cursor = posts_collection.find()          # Find documents in the collection
         documents_list_normal = list(cursor)      # Convert the cursor to a list of documents
@@ -195,15 +194,14 @@ def main():
                 "photos": doc.get("photos", ""),
                 "image_data": doc.get("image_data", ""),
                 "created_at": doc.get("created_at", ""),
-                "date_for_event": doc.get("date_for_event", "")
+                "date_for_event": doc.get("date_for_event", ""),
+                "user_name": doc.get("user_name", "")  # Fetch the user_name from the document
             }
             for doc in documents_list_normal
         ]
-       
 
         # After the loop
         return jsonify({'documents': convert_objectid_to_str(formatted_documents_list), 'name': name}), 200
-
 
     except Exception as e:
         print(f"Error in main route: {e}")
@@ -214,30 +212,28 @@ def main():
 @app.route('/posts', methods=["POST"])
 def posts():
     try:
-       
         title = request.form.get('title')
         description = request.form.get('description')
         photos = request.files.get('photos')
         date_of_creation = str(date.today())         #saving the date as string    
         date_of_event = request.form.get('date')
+        created_by = request.form.get('createdBy')   # get the createdBy field from the form data
 
-        if title and description and photos:
+        if title and description and photos and created_by:  # check if createdBy is not None
             # Save the file to GridFS
             file_id = save_file_to_gridfs(photos)
 
-            
             post_data = {
                 "title": title,
                 "description": description,
                 "photos": file_id,
                 "created_at": date_of_creation,
-                "date_for_event":date_of_event,
+                "date_for_event": date_of_event,
+                "user_name": created_by,  # add createdBy to the post data
             }
 
             # Insert the post into the MongoDB
             _ = posts_collection.insert_one(post_data)
-
-           
 
             return jsonify({"message": "Post created successfully"}), 200
         
