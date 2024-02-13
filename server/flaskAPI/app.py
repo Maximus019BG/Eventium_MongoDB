@@ -212,6 +212,7 @@ def main():
 @app.route('/posts', methods=["POST"])
 def posts():
     try:
+        
         title = request.form.get('title')
         description = request.form.get('description')
         photos = request.files.get('photos')

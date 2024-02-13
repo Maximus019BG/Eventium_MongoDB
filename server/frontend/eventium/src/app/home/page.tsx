@@ -76,9 +76,7 @@ const Main: React.FC = () => {
       })
       .catch(error => {
         console.error('Error fetching data:', error);
-        if (error.response && error.response.status === 500) {
-          router.push('/signin'); // Use router directly
-        }
+       
       });
     };
 
