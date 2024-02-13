@@ -55,6 +55,9 @@ const handleSignUp = async (event: React.FormEvent) => {
       name: username,
       email: email,
       password: password,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     // Check the response and handle it accordingly

@@ -2,12 +2,14 @@ import React, { useState, useEffect  } from 'react';
 
 const SideBar: React.FC = () => {
   const [isSpanClicked, setIsSpanClicked] = useState<boolean[]>([false, false, false]);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);  // Default to false
+
+  useEffect(() => {
+    // Set isDarkMode based on local storage and color scheme preference
     if (typeof window !== 'undefined') {
-      return localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      setIsDarkMode(localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches));
     }
-    return false;
-  });
+  }, []);
 
   useEffect(() => {
     if (isDarkMode) {
