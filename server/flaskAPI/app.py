@@ -8,8 +8,8 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from passlib.hash import bcrypt
 from pymongo import MongoClient
 from datetime import timedelta
-from .user.models import User
-from .user.routes import user_bp
+from user.models import User
+from user.routes import user_bp
 from flask_session import Session
 from werkzeug.utils import secure_filename
 from gridfs import GridFS
