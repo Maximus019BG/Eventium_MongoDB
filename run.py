@@ -1,4 +1,4 @@
-from server.flaskAPI.app import app
+from .server.flaskAPI.app import app
 
 if __name__ == "__main__":
     app.run()
