@@ -9,3 +9,4 @@ Flask-Caching
 flask-bcrypt
 requests
 python-dotenv
+gunicorn
