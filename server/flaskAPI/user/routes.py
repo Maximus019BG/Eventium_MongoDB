@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import User
+from user.models import User
 from flask_cors import CORS 
 
 
