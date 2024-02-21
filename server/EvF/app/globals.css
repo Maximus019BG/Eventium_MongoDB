@@ -1,0 +1,74 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+  ::-webkit-scrollbar {
+    display: none;
+
+}
+  ::placeholder{
+
+    font-size: 1em;
+  }
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.textarea-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+ background-color: white;
+ 
+
+}
+
+.nav {
+  @apply relative ml-10 text-gray-500 text-lg font-mono font-bold tracking-[1px] hover:text-black dark:hover:text-white dark:text-white
+}
+.nav::after {
+  @apply content-[''] bg-green-500 h-[2px] w-[0%] left-0 -bottom-[0px] rounded-xl absolute duration-300
+}
+.nav:hover::after {
+  @apply w-[100%]
+}
+
+.unselectable {
+  user-select: none;
+}
+
+/* Light Mode */
+.light {
+  background-color: white;
+  
+}
+
+/* Dark Mode */
+.dark {
+
+  background-color: #011E2B;  
+}
+
