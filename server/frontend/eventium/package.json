@@ -35,5 +35,5 @@
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   },
-  "proxy": "http://maximus019.pythonanywhere.com"
+  "proxy": "https://obscure-tor-03894-e493d0da8dbc.herokuapp.com/"
 }
