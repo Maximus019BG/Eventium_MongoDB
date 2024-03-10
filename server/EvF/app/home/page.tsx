@@ -6,7 +6,7 @@ import NavBar from '../Components/navbar';
 import SideBar from '../Components/sidebar';
 import configAPI from './../.config';
 import SearchBar from '../Components/SearchBar';
-import { useRouter } from 'next/navigation'; // Corrected from 'next/navigation'
+import { useRouter } from 'next/navigation'; 
 
 const Main: React.FC = () => {
   const [name, setUsername] = useState<string | null>(null);

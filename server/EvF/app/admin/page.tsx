@@ -138,10 +138,19 @@ const Main: React.FC = () => {
     }
   }, [searchTerm, documents]);
 
-  // Add these functions at the top of your component
+
     const handleTick = (index:number) => {
+      if (filteredDocuments) {
         console.log(`Tick clicked for document at index ${index}`);
-    
+        const document = filteredDocuments[index];
+        axios.put(`${apiUrl}/admin`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            title: document.title,
+            name: document.user_name
+        })
+      }
     };
 
     const handleCross = (index:number) => {
@@ -175,6 +184,7 @@ const Main: React.FC = () => {
         {loading && <p>Loading data...</p>}
         {error && <p>{error}</p>}
         
+        
             {filteredDocuments && (
                 <div className='relative z-0 ml-8 w-full xl:ml-80 md:ml-80 lg:ml-72  mt-36 mr-10 mb-2 grid grid-cols-1 gap-9 justify-items-center align-items-center  '>
                     {filteredDocuments.map((document, index) => (
@@ -186,7 +196,7 @@ const Main: React.FC = () => {
                             {openAccordion === index && (
                             <figure>
                              <Image
-                                src={`data:image/png;base64,${document.image_data}`}
+                                src={`data:image/png;base64,${document.image_data }`}
                                 alt={`Image ${index}`}
                                 width={700}
                                 height={700}

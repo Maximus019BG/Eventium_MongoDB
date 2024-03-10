@@ -202,7 +202,20 @@ def main():
 @app.route('/admin', methods=['PUT', 'DELETE', 'GET', 'POST', 'OPTIONS'])
 def admin():
     if request.method == "PUT":
+
         data = request.get_json()
+        name = data.get('name')
+        title = data.get('title')
+       
+
+        try:
+            posts_collection.update_one({"user_name": name, "title": title}, {"$set": {"user_ready": True, "admin_check": True}})
+            return jsonify({"message": "Post approved"}), 200
+        
+        except Exception as e:
+            print(f"Error in /admin route: {e}")
+            return jsonify({"error": "Internal server error"}), 500
+             
         
     if request.method == 'POST':
         data = request.get_json()
@@ -214,9 +227,9 @@ def admin():
         print(f"Current user: {name}")
        
         delete_expired_posts(posts_collection)
-        cursor = posts_collection.find()          # Find documents in the collection
-        documents_list_normal = list(cursor)      # Convert the cursor to a list of documents
-        random.shuffle(documents_list_normal)     # Shuffle 
+        cursor = posts_collection.find()            # Find documents in the collection
+        documents_list_normal = list(cursor)                # Convert the cursor to a list of documents
+        random.shuffle(documents_list_normal)                       # Shuffle 
         for i, document in enumerate(documents_list_normal):
             documents_list_normal[i] = convert_objectid_to_str(document)
           
@@ -252,10 +265,43 @@ def admin():
         print(f"Error in main route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
-
+ 
     
-    # return jsonify({"message": "Admin route"}), 200
+@app.route('/user/<name>', methods=['GET'])
+def user(name):
+    try:
+        cursor = posts_collection.find({"user_name": name})  # Find documents in the collection
+        documents_list = list(cursor)  # Convert the cursor to a list of documents
+        for i, document in enumerate(documents_list):
+            documents_list[i] = convert_objectid_to_str(document)
+            # Fetch the image data GridFS
+            image_id = document.get("photos")
+            image = grid_fs.get(ObjectId(image_id))
+            if image:
+                # Convert bytes to encoded string
+                document["image_data"] = base64.b64encode(image.read()).decode('utf-8')
 
+        # Extract title and ... fields from each document
+        formatted_documents_list = [
+            {
+                "title": doc.get("title", ""),
+                "description": doc.get("description", ""),
+                "photos": doc.get("photos", ""),
+                "image_data": doc.get("image_data", ""),
+                "created_at": doc.get("created_at", ""),
+                "date_for_event": doc.get("date_for_event", ""),
+                "user_name": doc.get("user_name", ""),
+                "admin_check": doc.get("admin_check", ""),
+                "user_ready": doc.get("user_ready", "")
+            }
+            for doc in documents_list
+        ]
+
+        return jsonify({'documents': convert_objectid_to_str(formatted_documents_list)}), 200
+
+    except Exception as e:
+        print(f"Error in /user route: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 
 @app.route('/logout', methods=["GET", "POST"])

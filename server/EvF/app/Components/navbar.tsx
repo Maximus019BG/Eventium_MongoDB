@@ -26,7 +26,7 @@ const NavBar: React.FC = () => {
         <h1 className='nav cursor-default' onClick={() => navigateTo('/home')}>Събития</h1>
         <h1 className='nav cursor-default' onClick={() => navigateTo('/create')}>Създай</h1>
         <h1 className='nav cursor-default' onClick={() => navigateTo('/land')}>Начало</h1>
-        {admin && <h1 className='nav cursor-default' onClick={() => navigateTo('/admin')}>Администрация</h1> || <h1 className='nav cursor-default' onClick={() => navigateTo('/profile')}>Профил</h1>}
+        {admin && <h1 className='nav cursor-default' onClick={() => navigateTo('/admin')}>Администрация</h1> || <h1 className='nav cursor-default' onClick={() => navigateTo('/user')}>Профил</h1>}
       </div>
     </div>
   );
