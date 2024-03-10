@@ -4,14 +4,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import NavBar from '../Components/navbar';
-import SideBar from '../Components/sidebar';
 import configAPI from './../.config';
 import videoFile from '../videos/BackGLand.mp4';
-
-
-
-
-
 
 
 
@@ -79,18 +73,18 @@ const Main: React.FC = () => {
           }
 
           else if (storedName === null) {
-            router?.push('/signin');
+          
             console.log('Впишете се!');
           }
           else if (storedName === response.data.name) {
             const response = `Здравейте отново ${storedName}! `;
-            console.log(response);
+        ;
           }
         }
       } catch (error:any) {
         console.error('Error fetching data:', error);
         if (error.response && error.response.status === 500) {
-          router.push('/signin'); // Use router directly
+
         }
       }
     };
@@ -101,8 +95,8 @@ const Main: React.FC = () => {
       isMounted = false;
     };
    
-    // eslint-disable-next-line
-  }, [router]);
+   
+  }, [router, apiUrl]);
 
   const handleLogout = async () => {
     try {
@@ -122,39 +116,53 @@ const Main: React.FC = () => {
     <div className='h-screen dark:bg-black overflow-hidden '>
     <section className='-mt-0 '>
       <div className='h-screen absolute w-screen bg-black opacity-70  z-10'></div>
-      <video src={require('../videos/BackGLand.mp4')} autoPlay muted loop className='-mt-12 fixed z-0' />
+      <video 
+        src={require('../videos/BackGLand.mp4')} 
+        autoPlay 
+        muted 
+        loop 
+        className='-mt-12 fixed z-0'
+        style={{ 
+          position: 'fixed',
+          right: '0',
+          bottom: '0',
+          minWidth: '100%',
+          minHeight: '100%',
+          width: 'auto',
+          height: 'auto',
+          zIndex: '0',
+          objectFit: 'cover'
+        }}
+      />
     </section>
-    <div className='flex absolute top-0 left-0 h-screen w-screen items-center justify-center '>
-    <section className='-ml-96 z-20 '>
-      <div className='flex -ml-96 items-center justify-left h-screen'>
-        <div className='text-left -mb-96'>
-          <h1 className='mt-16 font-extrabold text-7xl text-white  uppercase animate-fade-in-up'>
-            Добре дошли в&nbsp;
-            <span className=''>
-             Евентиум
-            </span>
-          </h1>
-         <h2 className='font-extrabold text-3xl mt-2  text-white uppercase animate-fade-in-up'>
-            Уеб приложението за&nbsp;
-            <span className=''>
-             събития
-            </span>
-         </h2>
-          <div>
-
-           <button onClick={toRegister} className='mt-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md text-lg animate-fade-in-up'>
-            Създай акаунт
-           </button>
-
-            <button onClick={toSignIn} className='mt-4 ml-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md text-lg animate-fade-in-up'>
-             Влез в акаунта си
-            </button>
+    <div className='flex absolute -top-56 left-0 h-screen w-screen items-center justify-center '>
+      <section className=' absolute left-2 z-20 '>
+        <div className='flex -ml-20  items-center justify-left h-screen'>
+          <div className='text-left ml-20 -mb-96'>
+            <h1 className='mt-16 font-extrabold text-4xl text-white uppercase animate-fade-in-up'>
+              Добре дошли в&nbsp;
+              <span className=''>
+                Евентиум
+              </span>
+            </h1>
+            <h2 className='font-extrabold text-2xl mt-2 absolute left-0 text-white uppercase animate-fade-in-up'>
+              Уеб приложението за&nbsp;
+              <span className=''>
+                събития
+              </span>
+            </h2>
+            <div>
+              <button onClick={toRegister} className='mt-28 absolute left-0   bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md text-md animate-fade-in-up'>
+                Създай акаунт
+              </button>
+              <button onClick={toSignIn} className='mt-28 ml-4 absolute left-44  bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md text-md animate-fade-in-up'>
+                Влез в акаунта си
+              </button>
+            </div>
           </div>
         </div>
-       </div>
-    </section>
-  
-   </div>
+      </section>
+    </div>
   </div>
 
   );

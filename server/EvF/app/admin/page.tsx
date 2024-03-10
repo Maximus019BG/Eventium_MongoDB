@@ -22,6 +22,8 @@ const Main: React.FC = () => {
   const apiUrl = configAPI.apiUrl ;
   const router = useRouter();
   const [admin, setAdmin] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState<number | null>(null);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -34,7 +36,7 @@ const Main: React.FC = () => {
     let isMounted = true;
    
     const fetchData = () => {
-      axios.get(`${apiUrl}/`, {
+      axios.get(`${apiUrl}/admin`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -58,7 +60,7 @@ const Main: React.FC = () => {
           if (storedName !== response.data.name) {
             localStorage.removeItem('name');
             const welcomeMessage = `Добре дошли "${response.data.name}" !`;
-            axios.post(`${apiUrl}/`, {
+            axios.post(`${apiUrl}/admin`, {
               headers: {
                 'Content-Type': 'application/json'
               },
@@ -69,9 +71,12 @@ const Main: React.FC = () => {
             console.log(welcomeMessage);
           }
 
-          else if (storedName === null) {
+          else if (storedName === null || storedName === undefined ) {
             router?.push('/signin');
             console.log('Впишете се!');
+          }
+          else if (storedName !== 'admin' && storedName !== 'Admin' && storedName !== 'ADMIN') {
+            router?.push('/home');
           }
           else if (storedName === response.data.name) {
             const response = `Здравейте отново ${storedName}! `;
@@ -133,6 +138,27 @@ const Main: React.FC = () => {
     }
   }, [searchTerm, documents]);
 
+  // Add these functions at the top of your component
+    const handleTick = (index:number) => {
+        console.log(`Tick clicked for document at index ${index}`);
+    
+    };
+
+    const handleCross = (index:number) => {
+        console.log(`Cross clicked for document at index ${index}`);
+    
+    };
+
+    const handleReadMore = (index:number) => {
+        console.log(`Read more clicked for document at index ${index}`);
+        
+    };
+   
+
+    const handleAccordionClick = (index: number) => {
+        setOpenAccordion(openAccordion === index ? null : index);
+    };
+
   return (
     <div className={`h-screen dark:bg-[#011E2B] `}>
       <div className='fixed z-30'>
@@ -148,35 +174,48 @@ const Main: React.FC = () => {
           </div>
         {loading && <p>Loading data...</p>}
         {error && <p>{error}</p>}
-        {filteredDocuments && (
-          <div className='relative z-0 ml-8 w-full xl:ml-80 md:ml-64 lg:ml-72 mt-36 mr-10 mb-2 grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-9 justify-items-center align-items-center'>
-            {filteredDocuments.map((document, index) => (
-              <div key={index} className='relative w-96 card border border-none '>
-                <figure>
-                  <Image
-                    src={`data:image/png;base64,${document.image_data}`}
-                    alt={`Image ${index}`}
-                    width={300}
-                    height={300}
-                    className='w-96 h-48 object-cover border-none rounded-t-md transition-transform hover:scale-125'
-                  />
-                </figure>
-                <div className="card-body w-96 bg-slate-200 dark:bg-[#081216] border-none rounded-b-md ">
-                  <h1 className='card-title font-bold'>{document.title}</h1>
-                  <p className='mt-2 font-semibold w-80 break-words'>
-                    {document.description}
-                  </p>
-                  <div className='flex flex-wrap mt-2'>
-                    <div className='badge badge-outline mx-1 '>От {document.user_name}</div>
-                    <div className='badge badge-outline mx-1 '>{document.date_for_event}</div>
-                  </div>
+        
+            {filteredDocuments && (
+                <div className='relative z-0 ml-8 w-full xl:ml-80 md:ml-80 lg:ml-72  mt-36 mr-10 mb-2 grid grid-cols-1 gap-9 justify-items-center align-items-center  '>
+                    {filteredDocuments.map((document, index) => (
+                        <div key={index} className="collapse collapse-arrow  dark:bg-base-200 bg-slate-200">
+                            <input type="radio" name={`my-accordion-${index}`} checked={openAccordion === index} onChange={() => handleAccordionClick(index)} /> 
+                            <div className="collapse-title text-xl text-clip text-gray-800 font-semibold dark:text-gray-200">
+                                {document.title}  <div className='badge badge-outline absolute mt-5 right-20'> {document.user_name}</div>
+                            </div>
+                            {openAccordion === index && (
+                            <figure>
+                             <Image
+                                src={`data:image/png;base64,${document.image_data}`}
+                                alt={`Image ${index}`}
+                                width={700}
+                                height={700}
+                                className='w-96 h-48 object-cover border-none rounded-md transition-transform hover:scale-125'
+                                />
+                            </figure>
+                             )}
+                            <div className="collapse-content"> 
+                                <p className='mt-2 font-semibold w-full break-words text-gray-800 dark:text-gray-300'>
+                                    {document.description.length > 340 ? `${document.description.substring(0, 340)}...` : document.description}
+                                </p>
+                                <div className="flex absolute justify-end bottom-6 right-5">
+                                    <button className="btn btn-success mx-1 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 font-bold" onClick={() => handleTick(index)}>
+                                        Допусни
+                                    </button>
+                                    <button className="btn btn-error mx-1 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 font-bold" onClick={() => handleCross(index)}>
+                                        Не допускам
+                                    </button>
+                                    <button className="btn btn-accent mx-1 hover:bg-[#02d1d1] dark:bg-accent-600 dark:hover:bg-[#02d1d1]" onClick={() => handleReadMore(index)}>
+                                        Прочети повече
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+            )}
+        </div>
+     </div>
   );
 };
 

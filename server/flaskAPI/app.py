@@ -101,7 +101,7 @@ def login():
 def check_session():
     if request.method == "POST":
         data = request.get_json()
-       
+
         if data and 'name' in data:
             session['name'] = data['name']
             response = make_response(jsonify({"message": "Login successful"}), 200)
@@ -119,6 +119,7 @@ def check_session():
                 response.set_cookie('name', session['name'])
         
                 requests.post(f'{api}/', json={"name": session['name']})
+                requests.post(f'{api}/admin', json={"name": session['name']})
                 return jsonify(session_info), response.status_code
     
     name = session.get('name')
@@ -148,6 +149,11 @@ def convert_objectid_to_str(data):
 
 @app.route('/', methods=['GET','POST'])
 def main():
+    if request.method == 'POST':
+        data = request.get_json()
+        name = data.get('name')  # Get the user's name from the POST request
+    else:
+        name = session.get('name')  # Get the user's name from the session
     try:
         name = User.current_name
         print(f"Current user: {name}")
@@ -168,7 +174,9 @@ def main():
                 # Convert bytes to encoded string
                 document["image_data"] = base64.b64encode(image.read()).decode('utf-8')
 
-        # Extract title... fields from each document
+
+        
+        # Extract title and ... fields from each document
         formatted_documents_list = [
             {
                 "title": doc.get("title", ""),
@@ -180,6 +188,7 @@ def main():
                 "user_name": doc.get("user_name", "")  # Fetch the user_name from the document
             }
             for doc in documents_list_normal
+            if doc.get("admin_check", True) is True and doc.get("user_ready", True) is True
         ]
 
         return jsonify({'documents': convert_objectid_to_str(formatted_documents_list), 'name': name}), 200
@@ -187,6 +196,74 @@ def main():
     except Exception as e:
         print(f"Error in main route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
+
+
+
+@app.route('/admin', methods=['PUT', 'DELETE', 'GET', 'POST', 'OPTIONS'])
+def admin():
+    if request.method == "PUT":
+        data = request.get_json()
+        
+    if request.method == 'POST':
+        data = request.get_json()
+        name = data.get('name')  
+    else:
+        name = session.get('name')  
+    try:
+        name = User.current_name
+        print(f"Current user: {name}")
+       
+        delete_expired_posts(posts_collection)
+        cursor = posts_collection.find()          # Find documents in the collection
+        documents_list_normal = list(cursor)      # Convert the cursor to a list of documents
+        random.shuffle(documents_list_normal)     # Shuffle 
+        for i, document in enumerate(documents_list_normal):
+            documents_list_normal[i] = convert_objectid_to_str(document)
+          
+
+            # Fetch the image data GridFS
+            image_id = document.get("photos")
+            image = grid_fs.get(ObjectId(image_id))
+
+            if image:
+                # Convert bytes to encoded string
+                document["image_data"] = base64.b64encode(image.read()).decode('utf-8')
+
+          
+        
+        formatted_documents_list = [
+            {
+                "title": doc.get("title", ""),
+                "description": doc.get("description", ""),
+                "photos": doc.get("photos", ""),
+                "image_data": doc.get("image_data", ""),
+                "created_at": doc.get("created_at", ""),
+                "date_for_event": doc.get("date_for_event", ""),
+                "user_name": doc.get("user_name", "")  # Fetch the user_name from the document
+            }
+                for doc in documents_list_normal
+                if doc.get("admin_check") is False and doc.get("user_ready") is False
+                
+        ]
+
+        return jsonify({'documents': convert_objectid_to_str(formatted_documents_list), 'name': name}), 200
+
+    except Exception as e:
+        print(f"Error in main route: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+    
+    # return jsonify({"message": "Admin route"}), 200
+
+
+
+@app.route('/logout', methods=["GET", "POST"])
+def logout():
+    session.clear()
+    logout_user()
+    return jsonify({"message": "User logged out"}), 200
+
 
 @app.route('/posts', methods=["POST"])
 def posts():
@@ -209,6 +286,8 @@ def posts():
                 "created_at": date_of_creation,
                 "date_for_event": date_of_event,
                 "user_name": user_name,
+                "admin_check": False,
+                "user_ready": False,
             }
 
             # Insert the post into the MongoDB
