@@ -133,6 +133,70 @@ const Main: React.FC = () => {
     }
   }, [searchTerm, documents]);
 
+  const handleReadMore = (index: number) => {
+    if (filteredDocuments && typeof index === 'number' && index >= 0 && index < filteredDocuments.length) {
+      const post = filteredDocuments[index];
+      const newWindow = window.open("", "_blank");
+      if (newWindow) {
+        try {
+          newWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body { 
+                  font-family: Arial, sans-serif; 
+                  margin: 0; 
+                  padding: 0; 
+                  background-color: #f4f4f4;
+                }
+                .container { 
+                 
+                  padding: 20px; 
+                  max-width: 700px;
+                  margin: 150px auto 150px auto;  
+                  background-color: #fff;
+                  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+                }
+                h1 { 
+                  color: #333; 
+                  font-size: 2em;
+                  margin-bottom: 0.5em;
+                }
+                p { 
+                  color: #666; 
+                  line-height: 1.6;
+                }
+                img { 
+                  max-width: 100%; 
+                  height: auto; 
+                  display: block;
+                  margin: 1em 0;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <h1>${post.title}</h1>
+                <img src="data:image/png;base64,${post.image_data}" alt="Image ${index}" />
+                <p>${post.description}</p>
+                <p>${post.date_for_event}</p>
+                <p>${post.user_name}</p>
+              </div>
+            </body>
+            </html>
+          `);
+        } catch (error) {
+          console.error('Error writing to new window:', error);
+        }
+      } else {
+        console.error('Unable to open new window');
+      }
+    } else {
+      console.error('Invalid index or filteredDocuments is not available');
+    }
+  };
+
   return (
     <div className={`h-screen dark:bg-[#011E2B] `}>
       <div className='fixed z-30'>
@@ -163,13 +227,20 @@ const Main: React.FC = () => {
                 </figure>
                 <div className="card-body w-96 bg-slate-200 dark:bg-[#081216] border-none rounded-b-md ">
                   <h1 className='card-title font-bold'>{document.title}</h1>
-                  <p className='mt-2 font-semibold w-80 break-words'>
-                    {document.description}
+                  <p className='mt-2 font-semibold w-full break-words text-gray-800 dark:text-gray-300'>
+                    {document.description.length > 165 ? `${document.description.substring(0, 165)}...` : document.description}
                   </p>
-                  <div className='flex flex-wrap mt-2'>
-                    <div className='badge badge-outline mx-1 '>От {document.user_name}</div>
-                    <div className='badge badge-outline mx-1 '>{document.date_for_event}</div>
+                  <div className='flex flex-col mt-2'>
+                    <div className='badge badge-outline mx-1 my-2 '>От {document.user_name}</div>
+                  
+                    <div className='badge badge-outline mx-1 my-2 '>{document.date_for_event}</div>
+                    
                   </div>
+                  <div className='absolute right-10 bottom-10'>
+                    <button className="btn relative btn-accent mx-1 hover:bg-[#02d1d1] dark:bg-accent-600 dark:hover:bg-[#02d1d1]" onClick={() => handleReadMore(index)}>
+                                        Прочети повече
+                     </button>
+                      </div>
                 </div>
               </div>
             ))}

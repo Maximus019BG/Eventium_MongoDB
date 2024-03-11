@@ -21,7 +21,15 @@ const UserEvents: React.FC = () => {
     const apiUrl = configAPI.apiUrl ;
     const router = useRouter();
     const [openAccordion, setOpenAccordion] = useState<number | null>(null);
-    const storedName = localStorage.getItem('name');
+    let storedName = '';
+
+
+    if (typeof window !== 'undefined') {
+
+         storedName = localStorage.getItem('name') || '';
+        
+    }
+  
 
     
 
@@ -85,8 +93,68 @@ const UserEvents: React.FC = () => {
         }
     }, [searchTerm, documents]);
 
-    const handleReadMore = (index:number) => {
-        console.log(`Read more clicked for document at index ${index}`);
+     const handleReadMore = (index: number) => {
+      if (filteredDocuments && typeof index === 'number' && index >= 0 && index < filteredDocuments.length) {
+        const post = filteredDocuments[index];
+        const newWindow = window.open("", "_blank");
+        if (newWindow) {
+          try {
+            newWindow.document.write(`
+              <!DOCTYPE html>
+              <html>
+              <head>
+                <style>
+                  body { 
+                    font-family: Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    background-color: #f4f4f4;
+                  }
+                  .container { 
+                   
+                    padding: 20px; 
+                    max-width: 800px;
+                    margin: 150px auto 150px auto;  
+                    background-color: #fff;
+                    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+                  }
+                  h1 { 
+                    color: #333; 
+                    font-size: 2em;
+                    margin-bottom: 0.5em;
+                  }
+                  p { 
+                    color: #666; 
+                    line-height: 1.6;
+                  }
+                  img { 
+                    max-width: 100%; 
+                    height: auto; 
+                    display: block;
+                    margin: 1em 0;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <h1>${post.title}</h1>
+                  <img src="data:image/png;base64,${post.image_data}" alt="Image ${index}" />
+                  <p>${post.description}</p>
+                  <p>${post.date_for_event}</p>
+                  <p>${post.user_name}</p>
+                </div>
+              </body>
+              </html>
+            `);
+          } catch (error) {
+            console.error('Error writing to new window:', error);
+          }
+        } else {
+          console.error('Unable to open new window');
+        }
+      } else {
+        console.error('Invalid index or filteredDocuments is not available');
+      }
     };
 
     const handleAccordionClick = (index: number) => {
