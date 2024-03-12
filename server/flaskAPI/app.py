@@ -198,8 +198,32 @@ def main():
         return jsonify({'error': 'Internal server error'}), 500
 
 
+@app.route('/admin/removed', methods=['PUT', 'OPTIONS'])
+def adminR():
+    if request.method == 'OPTIONS':
+        return '', 200
 
-@app.route('/admin', methods=['PUT', 'DELETE', 'GET', 'POST', 'OPTIONS'])
+    elif request.method == 'PUT':
+        data = request.get_json()
+        name = data.get('name')
+        title = data.get('title')
+
+        try:
+            posts_collection.update_one({"user_name": name, "title": title}, {"$set": {"user_ready": False,"admin_check": True}})
+            return jsonify({"message": "Post approved"}), 200
+
+        except Exception as e:
+            print(f"Error in /admin route: {e}")
+            return jsonify({"error": "Internal server error"}), 500
+
+    else:
+        return jsonify({"message": "This method is not supported"}), 405
+
+   
+        
+
+
+@app.route('/admin', methods=['PUT', 'POST', 'OPTIONS'])
 def admin():
     if request.method == "PUT":
 
@@ -266,7 +290,10 @@ def admin():
         return jsonify({'error': 'Internal server error'}), 500
 
  
+
+
     
+
 @app.route('/user/<name>', methods=['GET'])
 def user(name):
     try:
