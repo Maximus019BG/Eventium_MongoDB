@@ -8,6 +8,8 @@ import FilePhoto from '../images/Upload.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+
+
 const Create: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -19,19 +21,18 @@ const Create: React.FC = () => {
   const router = useRouter();
 
   console.log(storedName)
-  const handleSignUp = async () => {
+  const handlePostCreation = async () => {
     try {
       if (!date) {
         setError('Please select a date.');
         return;
       }
-
-      
+  
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
       formData.append('date', date.toISOString().split('T')[0]);
-
+      formData.append('createdBy', storedName);
       if (photos) {
         formData.append('photos', photos);
       }
@@ -39,9 +40,6 @@ const Create: React.FC = () => {
       await axios.post(`${apiUrl}/posts`, formData);
 
       localStorage.setItem('name', storedName);
-      router.push('/home');
-      
-      
       
     } catch (error) {
       console.error(error);
@@ -57,7 +55,7 @@ const Create: React.FC = () => {
 
   const handleDateChange = (date: Date | null) => {
     setdate(date);
-    setError(null); // Clear any previous error when date changes
+    setError(null); 
   };
   
 
@@ -67,7 +65,7 @@ const Create: React.FC = () => {
       <div className='flex w-5/6 h-5/6 shadow-sm shadow-slate-300 rounded-xl mx-36 p-24 justify-between'>
         <div className=' w-full'>
           <h1 className='my-10 font-bold '>Създай пост</h1>
-            <form onSubmit={handleSignUp}>
+            <form onSubmit={handlePostCreation}>
               <div>
               <input
                 type='text'

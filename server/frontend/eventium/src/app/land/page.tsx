@@ -26,17 +26,8 @@ const Main: React.FC = () => {
   const router = useRouter(); 
    const apiUrl = configAPI.apiUrl ;
 
-  useEffect(() => {
-   
-  }, []);
   
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
-  }, [isDarkMode]);
+
 
   useEffect(() => {
     let isMounted = true;

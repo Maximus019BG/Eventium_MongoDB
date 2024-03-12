@@ -22,30 +22,20 @@ const Main: React.FC = () => {
   const router = useRouter(); 
   const apiUrl = configAPI.apiUrl ;
 
-  useEffect(() => {
    
-  }, []);
   
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
-  }, [isDarkMode]);
 
   useEffect(() => {
     let isMounted = true;
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/`, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true,
-        });
-
+    const fetchData = () => {
+      axios.get(`${apiUrl}/`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+      })
+      .then(response => {
         if (response.status === 500) {
           router.push('/home'); 
           return;
@@ -75,13 +65,21 @@ const Main: React.FC = () => {
             const response = `Здравейте отново ${storedName}! `;
             console.log(response);
           }
+
+          // Log the created_at and date_for_event fields for each document
+          const documents = response.data.documents;
+          documents.forEach((document: any) => {
+            console.log(document.created_at);
+            console.log(document.date_for_event);
+          });
         }
-      } catch (error:any) {
+      })
+      .catch(error => {
         console.error('Error fetching data:', error);
         if (error.response && error.response.status === 500) {
           router.push('/signin'); // Use router directly
         }
-      }
+      });
     };
 
     fetchData();
@@ -89,14 +87,15 @@ const Main: React.FC = () => {
     return () => {
       isMounted = false;
     };
-   
-    // eslint-disable-next-line
-  }, [router]);
+  }, [router, apiUrl]);
 
   const handleLogout = async () => {
     try {
       await axios.post(`${apiUrl}/logout`, null, {
         withCredentials: true, 
+        headers: {
+          'Content-Type': 'application/json',
+        }
       });
 
       setAuthenticated(false);
@@ -107,7 +106,7 @@ const Main: React.FC = () => {
   };
 
   return (
-    <div className={`h-screen dark:bg-black  `}>
+    <div className={`h-screen dark:bg-[#011E2B]  `}>
       <NavBar />
       <div className='flex overflow-hidden'>
         <SideBar />
@@ -115,29 +114,29 @@ const Main: React.FC = () => {
         {loading && <p>Loading data...</p>}
         {error && <p>{error}</p>}
 
-        {authenticated && (
-          <p>
-            Welcome, {name}!{' '}
-            <button onClick={handleLogout}>Logout</button>
-          </p>
-        )}
-
         {documents && (
-          <div className='ml-80 mt-36  mr-10 mb-2 w-5/6'>
+          <div className='ml-80 mt-36 mr-10 mb-2 w-5/6 grid grid-cols-3 gap-9'>
             {documents.map((document, index) => (
-              <div key={index} className='mb-6 pt-6  pr-6 shadow-sm shadow-slate-300 rounded-xl w-11/12'>
-                <h1 className='font-semibold text-xl pl-6 w-screen'>{document.title}</h1>
-                <p className='mt-2 pl-6 w-screen'>{document.description}</p>
-                
-                {document.image_data && (
+              <div key={index} className='card border border-none '>
+                <figure>
                   <Image
                     src={`data:image/png;base64,${document.image_data}`}
                     alt={`Image ${index}`}
                     width={300}
                     height={300}
-                    className='mt-4 rounded-bl-xl '
+                    className='w-full h-48 object-cover border-none rounded-t-md'
                   />
-                )}
+                </figure>
+                <div className="card-body dark:bg-[#081216] border-none rounded-b-md ">
+                    <p className='text-sm font-extralight '> От {document.user_name}</p>
+                    <h1 className='card-title font-bold'>{document.title}</h1>
+                    <p className='mt-2 w-3/4 font-semibold '>{document.description}</p>
+                  <div className='flex '>
+                    <p> {document.user_name}</p>
+                    <p className='text-xs font-extralight'>Публикувано на {document.created_at}</p>
+                    <p className='text-xs font-extralight'>Ще се проведе на {document.date_for_event}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
