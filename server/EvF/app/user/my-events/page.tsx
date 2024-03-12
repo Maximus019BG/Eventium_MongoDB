@@ -166,22 +166,22 @@ const UserEvents: React.FC = () => {
             <div className='fixed z-30'>
                 <NavBar />
             </div>
-            <div className=' flex overflow-hidden z-10'>
+            <div className='z-10 flex overflow-hidden '>
                 <div className='fixed z-20'>
                     <SideBar setFilters={setFilters} setSearchTerm={setSearchTerm} setActiveFilters={setActiveFilters} />
                 </div>
-                <div className='absolute top-16 z-10 '>
+                <div className='absolute z-10 top-16 '>
                     <SearchBar filters={filters} setSearchTerm={setSearchTerm} activeFilters={activeFilters} />
                 </div>
                 {loading && <p>Loading data...</p>}
                 {error && <p>{error}</p>}
                 {filteredDocuments && (
-                    <div className='relative z-0 ml-8 w-full xl:ml-80 md:ml-80 lg:ml-72  mt-36 mr-10 mb-2 grid grid-cols-1 gap-9 justify-items-center align-items-center  '>
+                    <div className='relative z-0 grid w-full grid-cols-1 mb-2 ml-8 mr-10 xl:ml-80 md:ml-80 lg:ml-72 mt-36 gap-9 justify-items-center align-items-center '>
                         {filteredDocuments.map((document, index) => (
-                            <div key={index} className="collapse collapse-arrow  dark:bg-base-200 bg-slate-200">
+                            <div key={index} className="collapse collapse-arrow dark:bg-base-200 bg-slate-200">
                                 <input type="radio" name={`my-accordion-${index}`} checked={openAccordion === index} onChange={() => handleAccordionClick(index)} /> 
-                                <div className="collapse-title text-xl text-clip text-gray-800 font-semibold dark:text-gray-200">
-                                    {document.title}  <div className='badge badge-outline absolute mt-5 right-20'> {document.user_name}</div>
+                                <div className="text-xl font-semibold text-gray-800 collapse-title text-clip dark:text-gray-200">
+                                    {document.title}  <div className='absolute mt-5 badge badge-outline right-20'> {document.user_name}</div>
                                 </div>
                                 {openAccordion === index && (
                                     <figure>
@@ -190,15 +190,15 @@ const UserEvents: React.FC = () => {
                                             alt={`Image ${index}`}
                                             width={700}
                                             height={700}
-                                            className='w-96 h-48 object-cover border-none rounded-md transition-transform hover:scale-125'
+                                            className='object-cover h-48 transition-transform border-none rounded-md w-96 hover:scale-125'
                                         />
                                     </figure>
                                 )}
                                 <div className="collapse-content"> 
-                                    <p className='mt-2 font-semibold w-full break-words text-gray-800 dark:text-gray-300'>
+                                    <p className='w-full mt-2 font-semibold text-gray-800 break-words dark:text-gray-300'>
                                         {document.description.length > 340 ? `${document.description.substring(0, 340)}...` : document.description}
                                     </p>
-                                    <div className="flex absolute justify-end bottom-6 right-5">
+                                    <div className="absolute flex justify-end bottom-6 right-5">
                                         <button className="btn btn-accent mx-1 hover:bg-[#02d1d1] dark:bg-accent-600 dark:hover:bg-[#02d1d1]" onClick={() => handleReadMore(index)}>
                                             Прочети повече
                                         </button>
