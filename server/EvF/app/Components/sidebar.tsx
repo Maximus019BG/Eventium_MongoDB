@@ -66,6 +66,7 @@ const SideBar: React.FC<SideBarProps> = ({ setFilters, setSearchTerm, setActiveF
         <h1 className={`mb-4 ml-5 text-2xl font-semibold text-gray-900 dark:text-white`}>Филтри</h1>
 
         {filters.map((filter, index) => (
+          
           <span
             key={index}
             className={`border ${isSpanClicked[index] ? 'border-green-500 font-medium text-green-600 dark:text-green-400 dark:bg-[#011E2B] bg-green-100' : 'border-white font-normal'} px-5 font py-2 rounded-full cursor-pointer m-3 relative unselectable text-gray-900 dark:text-white`}
