@@ -13,7 +13,7 @@ const SideBar: React.FC<SideBarProps> = ({ setFilters, setSearchTerm, setActiveF
   const checkboxRef = useRef(null);
   const [activeFilters, setActiveFiltersLocal] = useState<string[]>([]);
 
-  const filters = useMemo(() => ['Концерт', 'Фестивал', 'Кино', 'Театър', 'Състезание', 'Опера','Спорт'], []); 
+  const filters = useMemo(() => ['Концерт', 'Фестивал', 'Кино', 'Театър', 'Състезание', 'Опера'], []); 
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
