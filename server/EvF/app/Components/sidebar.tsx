@@ -57,7 +57,7 @@ const SideBar: React.FC<SideBarProps> = ({ setFilters, setSearchTerm, setActiveF
   }, [filters, setFilters, activeFilters, setActiveFilters]);
 
   return (
-    <div className=' xl:-mt-11 lg:-mt-11 md:-mt-11 z-10 shadow-md shadow-slate-300 '>
+    <div className=' xl:-mt-11 lg:-mt-11 md:-mt-11 z-10 shadow-md shadow-slate-300'>
       <button className="toggle-button" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
       <span className={isSidebarOpen ? 'button-text button-text-show1' : 'button-text button-text-hide'}>Затвори</span>
       <span className={!isSidebarOpen ? 'button-text button-text-show ' : 'button-text button-text-hide'}>Отвори</span>
