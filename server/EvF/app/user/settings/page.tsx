@@ -78,27 +78,27 @@ const ChangeSettings: React.FC = () => {
     return (
         <>
         <NavBar />
-        <div className='h-screen dark:bg-[#011E2B] flex flex-col items-center justify-center'>
+        <div className='h-screen dark:bg-[#011E2B] flex flex-col items-center justify-center bg-green-50'>
         
-        <form className='space-y-4'>
+        <form className='space-y-8 p-40 bg-white light:shadow-sm shadow-slate-300 dark:bg-[#011E2B]'>
             <label className='flex flex-col space-y-1'>
                 <span>Име:</span>
                 <div className='flex space-x-2'>
-                    <input type="text" placeholder="Име" name="username" value={username} onChange={handleChange} className='px-4 py-2 rounded-md dark:bg-gray-800' />
+                    <input type="text" placeholder="Име" name="username" value={username} onChange={handleChange} className='px-4 py-2 rounded-md dark:bg-gray-800 bg-gray-100' />
                     <input type="submit" value="Промени Име" onClick={handleSubmit('username')} className='px-4 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white cursor-pointer' />
                 </div>
             </label>
             <label className='flex flex-col space-y-1'>
                 <span>Електронна поща:</span>
                 <div className='flex space-x-2'>
-                    <input type="email" placeholder="Електронна поща" name="email" value={email} onChange={handleChange} className='px-4 py-2 rounded-md dark:bg-gray-800' />
+                    <input type="email" placeholder="Електронна поща" name="email" value={email} onChange={handleChange} className='px-4 py-2 rounded-md dark:bg-gray-800 bg-gray-100' />
                     <input type="submit" value="Промени Електронна поща " onClick={handleSubmit('email')} className='px-4 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white cursor-pointer' />
                 </div>
             </label>
             <label className='flex flex-col space-y-1'>
                 <span>Парола:</span>
                 <div className='flex space-x-2'>
-                    <input type="password"  placeholder="Парола" name="password" value={password} onChange={handleChange} className='px-4 py-2 rounded-md dark:bg-gray-800' />
+                    <input type="password"  placeholder="Парола" name="password" value={password} onChange={handleChange} className='px-4 py-2 rounded-md dark:bg-gray-800 bg-gray-100' />
                     <input type="submit" value="Промени Парола" onClick={handleSubmit('password')} className='px-4 py-2 rounded-md bg-green-500 hover:bg-green-600 text-white cursor-pointer' />
                 </div>
             </label>
