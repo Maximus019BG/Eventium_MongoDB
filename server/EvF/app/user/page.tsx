@@ -37,7 +37,11 @@ const ProfilePage: React.FC = () => {
             }
         }
     }, [router]);
-
+    
+    if (storedName === null) {
+        router?.push('/signin');
+        console.log('Впишете се!');
+      }
 
     const clickEvents = () => {
         router.push('/user/my-events');
@@ -59,25 +63,25 @@ const ProfilePage: React.FC = () => {
                 alt="Hero"
                 width={1920}
                 height={1080}
-                className='object-cover w-full h-96 z-0'
+                className='z-0 object-cover w-full h-96'
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 opacity-50 z-10"></div>
-            <h1 className="absolute text-4xl font-bold left-24 top-24 text-white z-20">Здравейте {storedName}!</h1>
+            <div className="absolute inset-0 z-10 opacity-50 bg-gradient-to-r from-green-500 to-green-700"></div>
+            <h1 className="absolute z-20 text-4xl font-bold text-white left-24 top-24">Здравейте {storedName}!</h1>
         </div>
-        <div className="flex  items-center justify-center mt-10">
+        <div className="flex items-center justify-center mt-10">
          
-                <button className="bg-green-500 text-white px-64 py-10  m-4 rounded-lg flex flex-col items-center" onClick={clickSettings}>
+                <button className="flex flex-col items-center px-64 py-10 m-4 text-white bg-green-500 rounded-lg" onClick={clickSettings}>
                     <Image src={SettingsI} alt="Settings" width={200} height={200} /> 
                     <center>
-                        <span className="ml-2 w-40 text-3xl font-semibold">Настройки</span>
+                        <span className="w-40 ml-2 text-3xl font-semibold">Настройки</span>
                     </center>
                 </button>
            
           
-                <button className="bg-green-500 text-white px-64 py-10  m-4 rounded-lg flex flex-col items-center" onClick={clickEvents}>
+                <button className="flex flex-col items-center px-64 py-10 m-4 text-white bg-green-500 rounded-lg" onClick={clickEvents}>
                     <Image src={EventI} alt="Events" width={200} height={200} /> 
                     <center>
-                        <span className="ml-2 w-40 text-3xl font-semibold">Събития</span>
+                        <span className="w-40 ml-2 text-3xl font-semibold">Събития</span>
                     </center>
                 </button>
           

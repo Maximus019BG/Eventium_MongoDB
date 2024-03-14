@@ -29,7 +29,11 @@ const UserEvents: React.FC = () => {
          storedName = localStorage.getItem('name') || '';
         
     }
-  
+    
+    else if (storedName === null) {
+        router?.push('/signin');
+        console.log('Впишете се!');
+      }
 
     
 

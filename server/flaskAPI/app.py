@@ -302,13 +302,46 @@ def user(name):
     except Exception as e:
         print(f"Error in /user route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
-
+    
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
     session.clear()
+
+    # Clear the current user
+    User.current_name = None
+    User.current_email = None
+    User.current_id = None
+    User.current_password = None
+    User.current_user = None
+
     logout_user()
     return jsonify({"message": "User logged out"}), 200
+
+
+@app.route('/user/<name>/<type>/<new>', methods=['PUT','OPTIONS'], endpoint='user_update')
+def user(name, type, new):
+    try:
+        user = users_collection.find_one({"name": name})
+        if type == "name":
+            post_user = posts_collection.find_one_and_update({"user_name": name}, {"$set": {"user_name": new}})
+            current_user.name = new
+            User.current_name = new
+            User.current_user = new
+
+        elif type == "password":
+            new = bcrypt.generate_password_hash(new).decode('utf-8')
+        else:
+            new = new
+
+        update_result = users_collection.update_one({"name": name}, {"$set": {type: new}})
+
+        logout_user()
+        return jsonify({'message': f'Successfully updated {type}'}), 200
+
+    except Exception as e:
+        print(f"Error in /user/settings route: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 
 @app.route('/posts', methods=["POST"])
