@@ -37,7 +37,11 @@ const ProfilePage: React.FC = () => {
             }
         }
     }, [router]);
-
+    
+    if (storedName === null) {
+        router?.push('/signin');
+        console.log('Впишете се!');
+      }
 
     const clickEvents = () => {
         router.push('/user/my-events');
@@ -59,7 +63,7 @@ const ProfilePage: React.FC = () => {
                 alt="Hero"
                 width={1920}
                 height={1080}
-                className='object-cover w-full h-96 z-0'
+                className='z-0 object-cover w-full h-96'
             />
             <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 opacity-50 z-10"></div>
                 <h1 className="absolute text-4xl font-bold text-white z-20" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>Здравейте {storedName}!</h1>
