@@ -52,8 +52,8 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className={`h-screen dark:bg-[#011E2B] `}>
-        <NavBar />
-        <div className="relative">
+            <NavBar />
+            <div className="relative">
             <Image
                 src={Hero}
                 alt="Hero"
@@ -62,28 +62,24 @@ const ProfilePage: React.FC = () => {
                 className='object-cover w-full h-96 z-0'
             />
             <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-700 opacity-50 z-10"></div>
-            <h1 className="absolute text-4xl font-bold left-24 top-24 text-white z-20">Здравейте {storedName}!</h1>
-        </div>
-        <div className="flex  items-center justify-center mt-10">
-         
-                <button className="bg-green-500 text-white px-64 py-10  m-4 rounded-lg flex flex-col items-center" onClick={clickSettings}>
-                    <Image src={SettingsI} alt="Settings" width={200} height={200} /> 
+                <h1 className="absolute text-4xl font-bold text-white z-20" style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>Здравейте {storedName}!</h1>
+            </div>
+            <div className="flex flex-col lg:flex-row items-center justify-center mt-10">
+                <button className="bg-green-500 text-white 2xl:px-60 xl:px-40 lg:px-28 px-40 py-10 m-4 rounded-lg flex flex-col items-center w-full sm:w-auto" onClick={clickSettings}>
+                    <Image src={SettingsI} alt="Settings" width={200} height={200} />
                     <center>
-                        <span className="ml-2 w-40 text-3xl font-semibold">Настройки</span>
+                    <span className="ml-2 w-40 text-3xl font-semibold">Настройки</span>
                     </center>
                 </button>
-           
-          
-                <button className="bg-green-500 text-white px-64 py-10  m-4 rounded-lg flex flex-col items-center" onClick={clickEvents}>
-                    <Image src={EventI} alt="Events" width={200} height={200} /> 
+                <button className="bg-green-500 text-white 2xl:px-60 xl:px-40 lg:px-28 px-40 py-10 m-4 rounded-lg flex flex-col items-center w-full sm:w-auto" onClick={clickEvents}>
+                    <Image src={EventI} alt="Events" width={200} height={200} />
                     <center>
-                        <span className="ml-2 w-40 text-3xl font-semibold">Събития</span>
+                    <span className="ml-2 w-40 text-3xl font-semibold">Събития</span>
                     </center>
                 </button>
-          
+            </div>
         </div>
-    </div>
-    );
+        );   
 };
 
 export default ProfilePage;
