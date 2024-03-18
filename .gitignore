@@ -8,3 +8,5 @@ flask_session/
 node_modules
 
 .config.ts
+app.log
+```
