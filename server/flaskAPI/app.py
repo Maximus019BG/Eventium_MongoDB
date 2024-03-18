@@ -2,6 +2,8 @@ import os
 import random
 import requests
 import base64
+import logging
+from logging.handlers import RotatingFileHandler
 from datetime import timedelta, date, datetime
 from flask import Flask, jsonify, request, session, make_response
 from flask_cors import CORS
@@ -21,6 +23,25 @@ from flask_login import current_user
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+
+handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=3)
+# Create a logging format
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Set the formatter for the handler
+handler.setFormatter(formatter)
+
+# Add the handler to the logger
+app.logger.addHandler(handler)
+
+app.logger.setLevel(logging.INFO)
+
+#how to call this custom logger in the code
+app.logger.setLevel("INFO")
+
+app.logger.info("This is an info message")
+app.logger.critical('This is a critical message')
+
 
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7) 
@@ -71,7 +92,6 @@ def load_user(user_id):
 
 @app.route("/login", methods=["POST","GET","OPTIONS"])
 def login():
-    # ...
     if request.method == "OPTIONS":
         return jsonify({"message": "OK"}), 200
 
@@ -91,9 +111,10 @@ def login():
         User.current_name = user.name
         login_user(user, remember=True)        
         response = make_response(jsonify({"message": "Login successful"}), 200)
-        
+        app.logger.info(f"login route: {name}")
         return response
     else:
+        app.logger.error(f"Invalid credentials: {name}")
         return jsonify({"message": "Invalid credentials"}), 401
  
 
@@ -120,6 +141,7 @@ def check_session():
         
                 requests.post(f'{api}/', json={"name": session['name']})
                 requests.post(f'{api}/admin', json={"name": session['name']})
+                
                 return jsonify(session_info), response.status_code
     
     name = session.get('name')
@@ -156,7 +178,7 @@ def main():
         name = session.get('name')  # Get the user's name from the session
     try:
         name = User.current_name
-        print(f"Current user: {name}")
+        app.logger.info(f"Current user: {name}")
        
         delete_expired_posts(posts_collection)
         cursor = posts_collection.find()          # Find documents in the collection
@@ -190,11 +212,11 @@ def main():
             for doc in documents_list_normal
             if doc.get("admin_check", True) is True and doc.get("user_ready", True) is True
         ]
-
+        app.logger.info(f"Main route: {name}")
         return jsonify({'documents': convert_objectid_to_str(formatted_documents_list), 'name': name}), 200
 
     except Exception as e:
-        print(f"Error in main route: {e}")
+        app.logger.error(f"Error in main route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
 
@@ -213,7 +235,7 @@ def admin():
             return jsonify({"message": "Post approved"}), 200
         
         except Exception as e:
-            print(f"Error in /admin route: {e}")
+            app.logger.info(f"Error in /admin route: {e}")
             return jsonify({"error": "Internal server error"}), 500
              
         
@@ -224,7 +246,7 @@ def admin():
         name = session.get('name')  
     try:
         name = User.current_name
-        print(f"Current user: {name}")
+        app.logger.info(f"Current user: {name}")
        
         delete_expired_posts(posts_collection)
         cursor = posts_collection.find()            # Find documents in the collection
@@ -258,11 +280,11 @@ def admin():
                 if doc.get("admin_check") is False and doc.get("user_ready") is False
                 
         ]
-
+        app.logger.info(f"Admin route: {name}")
         return jsonify({'documents': convert_objectid_to_str(formatted_documents_list), 'name': name}), 200
 
     except Exception as e:
-        print(f"Error in main route: {e}")
+        app.logger.error(f"Error in /admin route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
  
@@ -270,15 +292,15 @@ def admin():
 @app.route('/user/<name>', methods=['GET'])
 def user(name):
     try:
-        cursor = posts_collection.find({"user_name": name})  # Find documents in the collection
-        documents_list = list(cursor)  # Convert the cursor to a list of documents
+        cursor = posts_collection.find({"user_name": name})  
+        documents_list = list(cursor) 
         for i, document in enumerate(documents_list):
             documents_list[i] = convert_objectid_to_str(document)
-            # Fetch the image data GridFS
+        
             image_id = document.get("photos")
             image = grid_fs.get(ObjectId(image_id))
             if image:
-                # Convert bytes to encoded string
+             
                 document["image_data"] = base64.b64encode(image.read()).decode('utf-8')
 
         # Extract title and ... fields from each document
@@ -296,11 +318,11 @@ def user(name):
             }
             for doc in documents_list
         ]
-
+        app.logger.info(f"user/{name} ")
         return jsonify({'documents': convert_objectid_to_str(formatted_documents_list)}), 200
 
     except Exception as e:
-        print(f"Error in /user route: {e}")
+        app.logger.info(f"Error in /user route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
     
 
@@ -340,7 +362,7 @@ def user(name, type, new):
         return jsonify({'message': f'Successfully updated {type}'}), 200
 
     except Exception as e:
-        print(f"Error in /user/settings route: {e}")
+        app.logger.error(f"Error in /user/settings route: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
 
@@ -378,7 +400,7 @@ def posts():
             return jsonify({"error": "Missing required parameters"}), 400
 
     except Exception as e:
-        print(f"Error in /posts route: {e}")
+        app.logger.error(f"Error in /posts route: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
 
