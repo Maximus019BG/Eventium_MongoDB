@@ -39,8 +39,8 @@ app.logger.setLevel(logging.INFO)
 #how to call this custom logger in the code
 app.logger.setLevel("INFO")
 
-app.logger.info("This is an info message")
-app.logger.critical('This is a critical message')
+app.logger.info("Server started")
+
 
 
 app.config['SESSION_TYPE'] = 'filesystem'

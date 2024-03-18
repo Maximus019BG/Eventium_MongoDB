@@ -45,20 +45,20 @@ const Signin: React.FC = () => {
     <div className="flex h-screen">
   
       {/* IMG */}
-      <div className="w-full md:w-3/5 hidden md:block overflow-hidden">
+      <div className="hidden w-full overflow-hidden md:w-3/5 md:block">
       <video src={require('../videos/Signin.mp4')} 
           autoPlay 
           muted 
           loop
-          className="w-full -top-1 h-full object-cover border-none"
+          className="object-cover w-full h-full border-none -top-1"
         />
       </div>
     
   
       {/* TEXT */}
-      <div className="w-full md:w-2/5 p-4 bg-white flex justify-center items-center flex-col mt-28 pb-20">
+      <div className="flex flex-col items-center justify-center w-full p-4 pb-20 bg-white md:w-2/5 mt-28">
   
-        <h1 className="text-3xl font-mono font-bold mb-5 mt-0 xl:mt-20 md:mt-20">Влизане</h1>
+        <h1 className="mt-0 mb-5 font-mono text-3xl font-bold xl:mt-20 md:mt-20">Влизане</h1>
   
         <form name="signup_form" onSubmit={handleSignIn} className="w-full max-w-md">
   
@@ -68,11 +68,11 @@ const Signin: React.FC = () => {
               type="text"
               id="name"
               name="name"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-500 bg-white text-black rounded-sm text-sm focus:outline-none"
+              className="w-full p-2 mt-1 text-sm text-black bg-white border-b-2 rounded-sm border-b-green-500 focus:outline-none"
               value={name}
               onChange={(e) => setUsername(e.target.value)}
               required
-              placeholder='Потребителски Име'
+              placeholder='Потребителско Име'
             />
           </div>
           
@@ -84,7 +84,7 @@ const Signin: React.FC = () => {
               type="password"
               id="password"
               name="password"
-              className="mt-1 p-2 w-full border-b-2 border-b-green-500 bg-white text-black rounded-sm text-sm  focus:outline-none "
+              className="w-full p-2 mt-1 text-sm text-black bg-white border-b-2 rounded-sm border-b-green-500 focus:outline-none "
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -93,25 +93,25 @@ const Signin: React.FC = () => {
           </div>
   
           <div className="flex items-center justify-between mt-4 mb-20">
-            <input type="submit" value="Влез в акаунт" className="bg-green-500 text-white  font-semibold p-4 rounded-md cursor-pointer text-bold hover:bg-green-600 text-md" />
+            <input type="submit" value="Влез в акаунт" className="p-4 font-semibold text-white bg-green-500 rounded-md cursor-pointer text-bold hover:bg-green-600 text-md" />
           </div>
   
         </form>
 
         
         <div>
-          <p className='absolute bottom-1 -ml-56'>Нямаш акаунт? &nbsp;
-            <Link href="../" passHref className=' underline text-green-500 font-medium'>Създай си</Link>
+          <p className='absolute -ml-56 bottom-1'>Нямаш акаунт? &nbsp;
+            <Link href="../" passHref className='font-medium text-green-500 underline '>Създай си</Link>
           </p>
 
         </div>
          {/* small divice background */}
-         <div className='w-screen  h-2/3 xl:hidden md:w-0 sm:w-screen sm: overflow-clip mx-0 -mb-20 '> 
+         <div className='w-screen mx-0 -mb-20 h-2/3 xl:hidden md:w-0 sm:w-screen sm: overflow-clip '> 
         <video src={require('../videos/Signin.mp4')} 
           autoPlay 
           muted 
           loop
-          className="w-full h-full object-cover border-none"
+          className="object-cover w-full h-full border-none"
         />
         </div>
       </div>

@@ -21,12 +21,12 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <div className='bg-white dark:bg-gray-800 pb-3 w-screen flex items-center justify-center shadow-sm shadow-slate-300 z-20   '> 
-      <div className='mx-auto flex space-x-8 mt-3 font-bold font-sans uppercase text-md text-black dark:text-white md:space-x-36 md:text-sd sm:space-x-16 items-center'>
-        <h1 className='nav cursor-default' onClick={() => navigateTo('/home')}>Събития</h1>
-        <h1 className='nav cursor-default' onClick={() => navigateTo('/create')}>Създай</h1>
-        <h1 className='nav cursor-default' onClick={() => navigateTo('/land')}>Начало</h1>
-        {admin && <h1 className='nav cursor-default' onClick={() => navigateTo('/admin')}>Администрация</h1> || <h1 className='nav cursor-default' onClick={() => navigateTo('/user')}>Профил</h1>}
+    <div className='z-20 flex items-center justify-center w-screen pb-3 bg-white shadow-sm dark:bg-gray-800 shadow-slate-300 '> 
+      <div className='flex items-center mx-auto mt-3 space-x-8 font-sans font-bold text-black uppercase text-md dark:text-white md:space-x-36 md:text-sd sm:space-x-16'>
+        <h1 className='cursor-default nav' onClick={() => navigateTo('/land')}>Начало</h1>
+        <h1 className='cursor-default nav' onClick={() => navigateTo('/home')}>Събития</h1>
+        <h1 className='cursor-default nav' onClick={() => navigateTo('/create')}>Създай</h1>        
+        {admin && <h1 className='cursor-default nav' onClick={() => navigateTo('/admin')}>Администрация</h1> || <h1 className='cursor-default nav' onClick={() => navigateTo('/user')}>Профил</h1>}
       </div>
     </div>
   );
